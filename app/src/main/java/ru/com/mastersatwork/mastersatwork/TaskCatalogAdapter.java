@@ -13,6 +13,12 @@ import ru.com.mastersatwork.mastersatwork.data.Task;
 
 public class TaskCatalogAdapter extends ArrayAdapter<Task> {
 
+    public static class ViewHolder {
+        TextView job;
+        TextView address;
+        TextView cost;
+    }
+
     public TaskCatalogAdapter(Context context, ArrayList<Task> tasks) {
         super(context, 0, tasks);
     }
@@ -23,18 +29,26 @@ public class TaskCatalogAdapter extends ArrayAdapter<Task> {
         // Получаем данные по опр. позиции в массиве
         Task task = getItem(position);
 
+        ViewHolder viewHolder;
+
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
+            viewHolder = new ViewHolder();
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.task_list_item, parent, false);
+
+            viewHolder.job = (TextView) convertView.findViewById(R.id.list_item_job);
+            viewHolder.address = (TextView) convertView.findViewById(R.id.list_item_adress);
+            viewHolder.cost = (TextView) convertView.findViewById(R.id.list_item_amount);
+
+            convertView.setTag(viewHolder);
+        } else {
+            // View is being recycled, retrieve the viewHolder object from tag
+            viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        TextView job = (TextView) convertView.findViewById(R.id.list_item_job);
-        TextView adress = (TextView) convertView.findViewById(R.id.list_item_adress);
-        TextView cost = (TextView) convertView.findViewById(R.id.list_item_amount);
-
-        job.setText(task.getJob());
-        adress.setText(task.getCustomersAddress());
-        cost.setText(task.getAmount());
+        viewHolder.job.setText(task.getJob());
+        viewHolder.address.setText(task.getCustomersAddress());
+        viewHolder.cost.setText(task.getAmount());
 
         return convertView;
     }

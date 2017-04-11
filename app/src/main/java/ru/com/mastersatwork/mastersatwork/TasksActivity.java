@@ -46,13 +46,7 @@ public class TasksActivity extends AppCompatActivity {
                 .build()
         );
 
-        ArrayList<Task> fakeData = new ArrayList<Task>();
-        Task task = new Task();
-        task.setJob("Покрасить стены");
-        task.setAmount("1000");
-        task.setCustomersAddress("Варшавское шоссе, 18, к.1");
-
-        adapter = new TaskCatalogAdapter(this, fakeData);
+        adapter = new TaskCatalogAdapter(this, new ArrayList<Task>());
 
         ListView listView = (ListView) findViewById(R.id.list_view);
 
