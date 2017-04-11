@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_detail_task"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="ru.com.mastersatwork.mastersatwork.DetailTaskActivity">
+
+    <LinearLayout
+        android:background="@color/colorPrimaryDark"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:gravity="center_horizontal"
+            android:id="@+id/detail_order_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Заказ 10232323"
+            android:textColor="@color/colorDetail"
+            fontPath="fonts/robotocondensedlight.ttf"
+            tools:ignore="MissingPrefix"
+            android:textSize="22sp"/>
+
+        <TextView
+            android:gravity="center_horizontal"
+            android:id="@+id/detail_order_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Починить стул"
+            android:textColor="@color/colorDetail"
+            fontPath="fonts/robotocondensedlight.ttf"
+            android:textSize="20sp"
+            tools:ignore="MissingPrefix"/>
+
+        <TextView
+            android:gravity="center_horizontal"
+            android:id="@+id/detail_order_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Цена заказа: 1000 / 60 мин."
+            android:textColor="@color/colorDetail"
+            fontPath="fonts/robotocondensedlight.ttf"
+            android:textSize="18sp"
+            tools:ignore="MissingPrefix"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:padding="16sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:paddingTop="10dp"
+            android:paddingLeft="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Клиент"/>
+
+        <TextView
+            fontPath="fonts/robotocondensedlight.ttf"
+            tools:ignore="MissingPrefix"
+            android:paddingTop="5dp"
+            android:paddingLeft="15dp"
+            android:id="@+id/detail_client_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Евгений Анатольевич"
+            android:textSize="20sp"/>
+
+        <TextView
+            android:paddingTop="10dp"
+            android:paddingLeft="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Телефон"/>
+
+        <TextView
+            fontPath="fonts/robotocondensedlight.ttf"
+            tools:ignore="MissingPrefix"
+            android:paddingTop="5dp"
+            android:paddingLeft="15dp"
+            android:id="@+id/detail_client_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="89266676738"/>
+
+        <TextView
+            android:paddingTop="10dp"
+            android:paddingLeft="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Адрес"/>
+
+        <TextView
+            fontPath="fonts/robotocondensedlight.ttf"
+            tools:ignore="MissingPrefix"
+            android:paddingTop="5dp"
+            android:paddingLeft="15dp"
+            android:id="@+id/detail_client_adress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="Москва, Варшавское шоссе, 18, к.1."/>
+
+        <TextView
+            android:paddingTop="10dp"
+            android:paddingLeft="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Комментарий:"/>
+
+        <TextView
+            fontPath="fonts/robotocondensedlight.ttf"
+            tools:ignore="MissingPrefix"
+            android:paddingTop="5dp"
+            android:paddingLeft="15dp"
+            android:id="@+id/detail_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="Здесь будет комментарий"/>
+
+        <Button
+            android:backgroundTint="@color/colorDetail"
+            fontPath="fonts/robotocondensedlight.ttf"
+            tools:ignore="MissingPrefix"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" Взять заказ "/>
+
+    </LinearLayout>
+
+</LinearLayout>
