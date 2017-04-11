@@ -74,6 +74,12 @@
             android:text="Евгений Анатольевич"
             android:textSize="20sp"/>
 
+        <View
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"/>
+
         <TextView
             android:paddingTop="10dp"
             android:paddingLeft="10dp"
@@ -81,16 +87,38 @@
             android:layout_height="wrap_content"
             android:text="Телефон"/>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
         <TextView
             fontPath="fonts/robotocondensedlight.ttf"
             tools:ignore="MissingPrefix"
             android:paddingTop="5dp"
             android:paddingLeft="15dp"
             android:id="@+id/detail_client_phone"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="10"
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:text="89266676738"/>
+
+        <ImageButton
+            android:id="@+id/image_button_phone"
+            android:background="@android:color/transparent"
+            android:src="@drawable/cellphone_basic_24"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"/>
 
         <TextView
             android:paddingTop="10dp"
@@ -99,16 +127,39 @@
             android:layout_height="wrap_content"
             android:text="Адрес"/>
 
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
         <TextView
             fontPath="fonts/robotocondensedlight.ttf"
             tools:ignore="MissingPrefix"
             android:paddingTop="5dp"
             android:paddingLeft="15dp"
             android:id="@+id/detail_client_adress"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="10"
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:text="Москва, Варшавское шоссе, 18, к.1."/>
+
+        <ImageButton
+            android:id="@+id/image_button_maps"
+            android:background="@android:color/transparent"
+            android:src="@drawable/google_maps24"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"/>
 
         <TextView
             android:paddingTop="10dp"

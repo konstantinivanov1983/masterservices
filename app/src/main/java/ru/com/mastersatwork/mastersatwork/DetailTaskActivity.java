@@ -8,6 +8,7 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
@@ -22,8 +23,10 @@ public class DetailTaskActivity extends AppCompatActivity {
     private TextView customerAddressView;
     private TextView customerPhoneView;
     private TextView commentView;
-    private String map;
-    private String phone;
+    String map;
+    String phone;
+    private ImageButton buttonPhone;
+    private ImageButton buttonMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +55,9 @@ public class DetailTaskActivity extends AppCompatActivity {
         map = "http://maps.google.co.in/maps?q="+ address;
         customerAddressView = (TextView) findViewById(R.id.detail_client_adress);
         customerAddressView.setText(address);
-        customerAddressView.setOnClickListener(new View.OnClickListener() {
+
+        buttonMap = (ImageButton) findViewById(R.id.image_button_maps);
+        buttonMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(map));
@@ -63,7 +68,9 @@ public class DetailTaskActivity extends AppCompatActivity {
         phone = getIntent().getStringExtra("CUSTOMER_PHONE");
         customerPhoneView = (TextView) findViewById(R.id.detail_client_phone);
         customerPhoneView.setText(phone);
-        customerPhoneView.setOnClickListener(new View.OnClickListener() {
+
+        buttonPhone = (ImageButton) findViewById(R.id.image_button_phone);
+        buttonPhone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_DIAL);

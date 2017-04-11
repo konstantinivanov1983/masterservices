@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Masters at Work</string>
+    <string name="settings_screen">Настройки</string>
+    <string name="settings_write_to_developers">Написать разработчикам</string>
 </resources>

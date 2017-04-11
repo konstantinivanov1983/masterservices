@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/settings_screen"
+        android:title="@string/settings_screen"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/settings_write_to_dev"
+        android:title="@string/settings_write_to_developers"
+        app:showAsAction="never"/>
+</menu>
