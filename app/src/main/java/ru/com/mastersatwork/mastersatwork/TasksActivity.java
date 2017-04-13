@@ -11,20 +11,27 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.orhanobut.logger.Logger;
-
 import java.util.ArrayList;
-
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
 import ru.com.mastersatwork.mastersatwork.data.Task;
+
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class TasksActivity extends AppCompatActivity {
+
+  // TODO Main screen before anything starts.
+  // TODO Show message if there's no internet connection
+  // TODO Sql statement to read data according to specific criteria
+  // TODO Two fragments for the main screen: current available orders + user assigned orders
+  // TODO SQLite database for user assigned
+  // TODO For authorization screen — check open source projects
 
     public static final String API_BASE_URL = "http://149.126.103.38";
     private OkHttpClient.Builder httpClient;
@@ -85,7 +92,7 @@ public class TasksActivity extends AppCompatActivity {
                 intent.putExtra("CUSTOMER_ADDRESS", data.get(position).getCustomersAddress());
                 intent.putExtra("CUSTOMER_PHONE", data.get(position).getCustomersPhone());
                 intent.putExtra("JOB", data.get(position).getJob());
-                intent.putExtra("COST", data.get(position).getAmount());
+                intent.putExtra("AMOUNT", data.get(position).getAmount());
                 intent.putExtra("COMMENT", data.get(position).getComment());
                 startActivity(intent);
             }

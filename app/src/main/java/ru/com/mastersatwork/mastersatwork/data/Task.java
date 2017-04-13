@@ -27,6 +27,8 @@ public class Task {
     @Expose
     private String comment;
 
+    private boolean assignedMaster;
+
     public String getOrderNumber() {
         return orderNumber;
     }
@@ -81,6 +83,14 @@ public class Task {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public void setAssignedMaster(boolean state) {
+        this.assignedMaster = state;
+    }
+
+    public boolean getAssignedMaster() {
+        return assignedMaster;
     }
 
 }

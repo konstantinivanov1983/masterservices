@@ -8,9 +8,15 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.orhanobut.logger.Logger;
+
+import ru.com.mastersatwork.mastersatwork.data.Task;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -23,10 +29,13 @@ public class DetailTaskActivity extends AppCompatActivity {
     private TextView customerAddressView;
     private TextView customerPhoneView;
     private TextView commentView;
-    String map;
-    String phone;
+    private String map;
+    private String phone;
     private ImageButton buttonPhone;
     private ImageButton buttonMap;
+
+    private DatabaseReference databaseReference;
+    private FirebaseDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,10 +88,32 @@ public class DetailTaskActivity extends AppCompatActivity {
             }
         });
 
-
-
         commentView = (TextView) findViewById(R.id.detail_comment);
         commentView.setText(getIntent().getStringExtra("COMMENT"));
+
+        Button takeOrderButton = (Button) findViewById(R.id.button_take_order);
+        takeOrderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                database = FirebaseDatabase.getInstance();
+                databaseReference = database.getReference().child("orders");
+
+                Task task = new Task();
+                task.setAmount(getIntent().getStringExtra("AMOUNT"));
+                task.setJob(getIntent().getStringExtra("JOB"));
+                task.setComment(getIntent().getStringExtra("COMMENT"));
+                task.setCustomersName(getIntent().getStringExtra("CUSTOMER_NAME"));
+                task.setCustomersAddress(getIntent().getStringExtra("CUSTOMER_ADDRESS"));
+                task.setCustomersPhone(getIntent().getStringExtra("CUSTOMER_PHONE"));
+                task.setAssignedMaster(true);
+
+                Logger.d("Button is pressed");
+
+                databaseReference.push().setValue(task);
+            }
+        });
+
 
     }
 

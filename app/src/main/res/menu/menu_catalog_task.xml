@@ -3,10 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/settings_screen"
-        android:title="@string/settings_screen"
-        app:showAsAction="never"/>
+        android:icon="@drawable/ic_settings"
+        app:showAsAction="always"/>
     <item
         android:id="@+id/settings_write_to_dev"
-        android:title="@string/settings_write_to_developers"
-        app:showAsAction="never"/>
+        android:title="@string/settings_write_to_developers" />
 </menu>

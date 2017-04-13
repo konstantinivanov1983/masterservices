@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "906680317141",
+    "firebase_url": "https://mastersatwork-4776e.firebaseio.com",
+    "project_id": "mastersatwork-4776e",
+    "storage_bucket": "mastersatwork-4776e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:906680317141:android:a5b523d793db0449",
+        "android_client_info": {
+          "package_name": "ru.com.mastersatwork.mastersatwork"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "906680317141-u0oib62h3a68mtjh60fd84brusddbgrd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ru.com.mastersatwork.mastersatwork",
+            "certificate_hash": "246ecd23ad49ed109cb0637bd0dbbe2a68096728"
+          }
+        },
+        {
+          "client_id": "906680317141-pi9vao6aal1de0l5pfvhp85r6o96g70j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABmtk_S3IHXjlBZdTXSz--nJIHFKRceds"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "906680317141-pi9vao6aal1de0l5pfvhp85r6o96g70j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

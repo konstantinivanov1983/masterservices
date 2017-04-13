@@ -180,6 +180,7 @@
             android:text="Здесь будет комментарий"/>
 
         <Button
+            android:id="@+id/button_take_order"
             android:backgroundTint="@color/colorDetail"
             fontPath="fonts/robotocondensedlight.ttf"
             tools:ignore="MissingPrefix"
