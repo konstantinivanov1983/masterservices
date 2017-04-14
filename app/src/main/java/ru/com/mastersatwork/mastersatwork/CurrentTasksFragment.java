@@ -10,16 +10,15 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
-import com.orhanobut.logger.Logger;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
 import okhttp3.OkHttpClient;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 import ru.com.mastersatwork.mastersatwork.data.Task;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
@@ -27,11 +26,15 @@ public class CurrentTasksFragment extends Fragment {
 
     public static final String API_BASE_URL = "http://149.126.103.38";
     private OkHttpClient.Builder httpClient;
-    private OkHttpClient client;
     private TaskApi taskApi;
     private TaskCatalogAdapter adapter;
     private ProgressBar progressBar;
     private ArrayList<Task> data;
+
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference mOrdersDatabaseReference;
+    private ChildEventListener mChildEventListener;
+
 
     public static CurrentTasksFragment newInstance() {
         CurrentTasksFragment fragment = new CurrentTasksFragment();
@@ -55,47 +58,30 @@ public class CurrentTasksFragment extends Fragment {
                 .build()
         );
 
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("orders");
+
         adapter = new TaskCatalogAdapter(getActivity(), new ArrayList<Task>());
 
         ListView listView = (ListView) view.findViewById(R.id.list_view_current_tasks);
 
         listView.setAdapter(adapter);
 
-        taskApi = settingRetrofit();
-
-        Call<ArrayList<Task>> call = taskApi.getData();
-
         progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
 
-        // Making a call through retrofit.
-        call.enqueue(new Callback<ArrayList<Task>>() {
-            @Override
-            public void onResponse(Call<ArrayList<Task>> call, Response<ArrayList<Task>> response) {
-                if (response.body() != null) {
-
-                    progressBar.setVisibility(View.INVISIBLE);
-                    data = response.body();
-                    adapter.addAll(data);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ArrayList<Task>> call, Throwable t) {
-                Logger.d("Retrofit call onFailure: " + t.getMessage());
-            }
-        });
+        attachDatabaseReadListener();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), DetailTaskActivity.class);
-                intent.putExtra("ORDER_ID", data.get(position).getOrderNumber());
-                intent.putExtra("CUSTOMER_NAME", data.get(position).getCustomersName());
-                intent.putExtra("CUSTOMER_ADDRESS", data.get(position).getCustomersAddress());
-                intent.putExtra("CUSTOMER_PHONE", data.get(position).getCustomersPhone());
-                intent.putExtra("JOB", data.get(position).getJob());
-                intent.putExtra("AMOUNT", data.get(position).getAmount());
-                intent.putExtra("COMMENT", data.get(position).getComment());
+                intent.putExtra("ORDER_ID", adapter.getItem(position).getOrderNumber());
+                intent.putExtra("CUSTOMER_NAME", adapter.getItem(position).getCustomersName());
+                intent.putExtra("CUSTOMER_ADDRESS", adapter.getItem(position).getCustomersAddress());
+                intent.putExtra("CUSTOMER_PHONE", adapter.getItem(position).getCustomersPhone());
+                intent.putExtra("JOB", adapter.getItem(position).getJob());
+                intent.putExtra("AMOUNT", adapter.getItem(position).getAmount());
+                intent.putExtra("COMMENT", adapter.getItem(position).getComment());
                 startActivity(intent);
             }
         });
@@ -103,24 +89,44 @@ public class CurrentTasksFragment extends Fragment {
         return view;
     }
 
-    private TaskApi settingRetrofit() {
 
-        httpClient = new OkHttpClient.Builder();
+    private void attachDatabaseReadListener() {
+        if (mChildEventListener == null) {
+            mChildEventListener = new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    if (progressBar.getVisibility() == View.VISIBLE) {
+                        progressBar.setVisibility(View.INVISIBLE);
+                    }
+                    Task newOrder = dataSnapshot.getValue(Task.class);
+                    adapter.add(newOrder);
 
-        Retrofit.Builder builder =
-                new Retrofit.Builder()
-                        .baseUrl(API_BASE_URL)
-                        .addConverterFactory(
-                                GsonConverterFactory.create()
-                        );
+                }
 
-        Retrofit retrofit =
-                builder
-                        .client(
-                                httpClient.build()
-                        )
-                        .build();
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {}
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+                @Override
+                public void onCancelled(DatabaseError databaseError) {}
+            };
+        }
 
-        return retrofit.create(TaskApi.class);
+        mOrdersDatabaseReference.addChildEventListener(mChildEventListener);
+    }
+
+    private void detachDatabaseReadListener() {
+        if (mChildEventListener != null) {
+            mOrdersDatabaseReference.removeEventListener(mChildEventListener);
+            mChildEventListener = null;
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        detachDatabaseReadListener();
     }
 }

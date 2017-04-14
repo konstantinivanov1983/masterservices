@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.orhanobut.logger.Logger;
+
 import java.util.ArrayList;
 
 import ru.com.mastersatwork.mastersatwork.data.Task;
@@ -48,6 +50,7 @@ public class TaskCatalogAdapter extends ArrayAdapter<Task> {
 
         viewHolder.job.setText(task.getJob());
         viewHolder.address.setText(task.getCustomersAddress());
+        Logger.d("Current price: " + task.getAmount());
         viewHolder.cost.setText(task.getAmount());
 
         return convertView;

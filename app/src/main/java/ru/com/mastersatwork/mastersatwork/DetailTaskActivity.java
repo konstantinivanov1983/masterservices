@@ -56,7 +56,7 @@ public class DetailTaskActivity extends AppCompatActivity {
         jobView = (TextView) findViewById(R.id.detail_order_title);
         jobView.setText(getIntent().getStringExtra("JOB"));
         costView = (TextView) findViewById(R.id.detail_order_price);
-        costView.setText(getIntent().getStringExtra("COST") + " \u20BD");
+        costView.setText(getIntent().getStringExtra("AMOUNT") + " \u20BD");
         customerNameView = (TextView) findViewById(R.id.detail_client_name);
         customerNameView.setText(getIntent().getStringExtra("CUSTOMER_NAME"));
 

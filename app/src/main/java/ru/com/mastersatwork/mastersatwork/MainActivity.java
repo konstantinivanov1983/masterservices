@@ -17,7 +17,6 @@ public class MainActivity extends AppCompatActivity {
     // TODO Main screen before anything starts.
     // TODO Show message if there's no internet connection
     // TODO Sql statement to read data according to specific criteria
-    // TODO Two fragments for the main screen: current available orders + user assigned orders
     // TODO SQLite database for user assigned
     // TODO For authorization screen — check open source projects
 
