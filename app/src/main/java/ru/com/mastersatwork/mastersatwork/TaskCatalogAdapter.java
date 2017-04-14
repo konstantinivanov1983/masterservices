@@ -15,6 +15,8 @@ import ru.com.mastersatwork.mastersatwork.data.Task;
 
 public class TaskCatalogAdapter extends ArrayAdapter<Task> {
 
+    private ArrayList<Task> tasks;
+
     public static class ViewHolder {
         TextView job;
         TextView address;
@@ -23,6 +25,7 @@ public class TaskCatalogAdapter extends ArrayAdapter<Task> {
 
     public TaskCatalogAdapter(Context context, ArrayList<Task> tasks) {
         super(context, 0, tasks);
+        this.tasks = tasks;
     }
 
     @Override
@@ -54,5 +57,17 @@ public class TaskCatalogAdapter extends ArrayAdapter<Task> {
         viewHolder.cost.setText(task.getAmount());
 
         return convertView;
+    }
+
+    public void removeItemByFirebaseId(String firebaseId) {
+        if (tasks != null & tasks.size()>0) {
+            for (Task task : tasks) {
+                if (task.getOrderKey().equals(firebaseId)) {
+                    tasks.remove(task);
+                    notifyDataSetChanged();
+                    return;
+                }
+            }
+        }
     }
 }

@@ -15,6 +15,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 
@@ -34,6 +36,7 @@ public class CurrentTasksFragment extends Fragment {
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mOrdersDatabaseReference;
     private ChildEventListener mChildEventListener;
+    private Query query;
 
 
     public static CurrentTasksFragment newInstance() {
@@ -61,6 +64,10 @@ public class CurrentTasksFragment extends Fragment {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("orders");
 
+        query = mOrdersDatabaseReference.orderByChild("assignedMaster").equalTo(false);
+        query.keepSynced(true);
+
+
         adapter = new TaskCatalogAdapter(getActivity(), new ArrayList<Task>());
 
         ListView listView = (ListView) view.findViewById(R.id.list_view_current_tasks);
@@ -76,6 +83,7 @@ public class CurrentTasksFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), DetailTaskActivity.class);
                 intent.putExtra("ORDER_ID", adapter.getItem(position).getOrderNumber());
+                Logger.d("ORDER_ID in CurrentTasksFragment: " + adapter.getItem(position).getOrderNumber());
                 intent.putExtra("CUSTOMER_NAME", adapter.getItem(position).getCustomersName());
                 intent.putExtra("CUSTOMER_ADDRESS", adapter.getItem(position).getCustomersAddress());
                 intent.putExtra("CUSTOMER_PHONE", adapter.getItem(position).getCustomersPhone());
@@ -99,14 +107,28 @@ public class CurrentTasksFragment extends Fragment {
                         progressBar.setVisibility(View.INVISIBLE);
                     }
                     Task newOrder = dataSnapshot.getValue(Task.class);
-                    adapter.add(newOrder);
+                    String key = dataSnapshot.getKey();
+                    newOrder.setOrderKey(key);
+                    Logger.d("dataSnapshot.getKey(): " + dataSnapshot.getKey());
+                    Logger.d("Order ID in onChildAdded: " + newOrder.getOrderKey());
+
+                    //Adding only those orders which have no master assigned:
+                    if (newOrder.getAssignedMaster() == false) {
+                        adapter.add(newOrder);
+                    }
 
                 }
 
                 @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                }
                 @Override
-                public void onChildRemoved(DataSnapshot dataSnapshot) {}
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+                    adapter.removeItemByFirebaseId(dataSnapshot.getKey());
+                    query = mOrdersDatabaseReference.orderByChild("assignedMaster").equalTo(false);
+
+                }
                 @Override
                 public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
                 @Override
@@ -114,12 +136,14 @@ public class CurrentTasksFragment extends Fragment {
             };
         }
 
-        mOrdersDatabaseReference.addChildEventListener(mChildEventListener);
+        //mOrdersDatabaseReference.addChildEventListener(mChildEventListener);
+        query.addChildEventListener(mChildEventListener);
     }
 
     private void detachDatabaseReadListener() {
         if (mChildEventListener != null) {
-            mOrdersDatabaseReference.removeEventListener(mChildEventListener);
+            //mOrdersDatabaseReference.removeEventListener(mChildEventListener);
+            query.removeEventListener(mChildEventListener);
             mChildEventListener = null;
         }
     }

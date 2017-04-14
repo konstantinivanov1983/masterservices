@@ -53,6 +53,7 @@ public class DetailTaskActivity extends AppCompatActivity {
 
         orderNumberView = (TextView) findViewById(R.id.detail_order_number);
         orderNumberView.setText("Заказ: " + getIntent().getStringExtra("ORDER_ID"));
+        Logger.d("Order ID: " + getIntent().getStringExtra("ORDER_ID"));
         jobView = (TextView) findViewById(R.id.detail_order_title);
         jobView.setText(getIntent().getStringExtra("JOB"));
         costView = (TextView) findViewById(R.id.detail_order_price);

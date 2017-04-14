@@ -29,6 +29,16 @@ public class Task {
 
     private boolean assignedMaster;
 
+    private String key;
+
+    public void setOrderKey(String k) {
+        this.key = k;
+    }
+
+    public String getOrderKey() {
+        return key;
+    }
+
     public String getOrderNumber() {
         return orderNumber;
     }
