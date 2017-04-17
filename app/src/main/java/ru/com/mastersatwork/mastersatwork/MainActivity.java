@@ -3,23 +3,25 @@ package ru.com.mastersatwork.mastersatwork;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.firebase.ui.auth.AuthUI;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends AppCompatActivity {
 
-    // TODO Main screen before anything starts.
-    // TODO Show message if there's no internet connection
-    // TODO Sql statement to read data according to specific criteria
-    // TODO SQLite database for user assigned
-    // TODO For authorization screen — check open source projects
-
+    private FirebaseAuth firebaseAuth;
+    private FirebaseAuth.AuthStateListener authStateListener;
+    private static final int RC_SIGN_IN = 2410;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,14 +35,34 @@ public class MainActivity extends AppCompatActivity {
                 .build()
         );
 
-        // Get the ViewPager and set it's PagerAdapter so that it can display items
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        viewPager.setAdapter(new CustomFragmentPagerAdapter(getSupportFragmentManager(),
-                MainActivity.this));
+        firebaseAuth = FirebaseAuth.getInstance();
 
-        // Give the TabLayout the ViewPager
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
-        tabLayout.setupWithViewPager(viewPager);
+        authStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    // Get the ViewPager and set its PagerAdapter so that it can display items
+                    ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+                    viewPager.setAdapter(new CustomFragmentPagerAdapter(getSupportFragmentManager(),
+                            MainActivity.this));
+
+                    // Give the TabLayout the ViewPager
+                    TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+                    tabLayout.setupWithViewPager(viewPager);
+                } else {
+                    startActivityForResult(
+                            AuthUI.getInstance()
+                                    .createSignInIntentBuilder()
+                                    .setProviders(AuthUI.EMAIL_PROVIDER, AuthUI.GOOGLE_PROVIDER)
+                                    .setIsSmartLockEnabled(false)
+                                    .build()
+                            ,
+                            RC_SIGN_IN);
+                }
+
+            }
+        };
     }
 
     @Override
@@ -64,4 +86,17 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        firebaseAuth.addAuthStateListener(authStateListener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (authStateListener != null) {
+            firebaseAuth.removeAuthStateListener(authStateListener);
+        }
+    }
 }

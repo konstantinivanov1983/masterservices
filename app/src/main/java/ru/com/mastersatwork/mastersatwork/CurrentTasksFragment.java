@@ -47,6 +47,7 @@ public class CurrentTasksFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        adapter = new TaskCatalogAdapter(getActivity(), new ArrayList<Task>());
     }
 
     @Override
@@ -62,13 +63,12 @@ public class CurrentTasksFragment extends Fragment {
         );
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
+
         mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("orders");
 
         query = mOrdersDatabaseReference.orderByChild("assignedMaster").equalTo(false);
         query.keepSynced(true);
 
-
-        adapter = new TaskCatalogAdapter(getActivity(), new ArrayList<Task>());
 
         ListView listView = (ListView) view.findViewById(R.id.list_view_current_tasks);
 
