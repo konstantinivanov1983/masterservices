@@ -100,6 +100,9 @@ public class DetailTaskActivity extends AppCompatActivity {
                 database = FirebaseDatabase.getInstance();
                 databaseReference = database.getReference().child("orders");
 
+                String taskId = getIntent().getStringExtra("FIREBASE_ORDER_KEY");
+                Logger.d("ORDER ID TO UPDATE: " + taskId);
+
                 Task task = new Task();
                 task.setAmount(getIntent().getStringExtra("AMOUNT"));
                 task.setJob(getIntent().getStringExtra("JOB"));
@@ -112,7 +115,8 @@ public class DetailTaskActivity extends AppCompatActivity {
 
                 Logger.d("Button is pressed");
 
-                databaseReference.push().setValue(task);
+                //databaseReference.push().setValue(task);
+                databaseReference.child(taskId).setValue(task);
             }
         });
 

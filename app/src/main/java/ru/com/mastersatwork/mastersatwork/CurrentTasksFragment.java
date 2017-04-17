@@ -90,6 +90,7 @@ public class CurrentTasksFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), DetailTaskActivity.class);
                 intent.putExtra("ORDER_ID", adapter.getItem(position).getOrderNumber());
+                intent.putExtra("FIREBASE_ORDER_KEY", adapter.getItem(position).getOrderKey());
                 Logger.d("ORDER_ID in CurrentTasksFragment: " + adapter.getItem(position).getOrderNumber());
                 intent.putExtra("CUSTOMER_NAME", adapter.getItem(position).getCustomersName());
                 intent.putExtra("CUSTOMER_ADDRESS", adapter.getItem(position).getCustomersAddress());
