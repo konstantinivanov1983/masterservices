@@ -1,6 +1,7 @@
 package ru.com.mastersatwork.mastersatwork;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
@@ -88,10 +89,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onResume() {
+        super.onResume();
         firebaseAuth.addAuthStateListener(authStateListener);
     }
+
 
     @Override
     protected void onStop() {
@@ -101,5 +103,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_SIGN_IN) {
+            if (resultCode == RESULT_CANCELED) {
+                finish();
+            }
+        }
+    }
 }
