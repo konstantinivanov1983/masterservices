@@ -9,4 +9,7 @@
     <item
         android:id="@+id/settings_write_to_dev"
         android:title="@string/settings_write_to_developers" />
+    <item
+        android:id="@+id/settings_sign_out"
+        android:title="@string/settings_sign_out"/>
 </menu>

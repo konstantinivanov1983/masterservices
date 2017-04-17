@@ -1,7 +1,6 @@
 package ru.com.mastersatwork.mastersatwork;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
@@ -80,8 +79,10 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.settings_write_to_dev:
-                Intent intent = new Intent(MainActivity.this, MainActivity.class);
-                startActivity(intent);
+                // TODO Create an intent for writing to developers.
+                return true;
+            case R.id.settings_sign_out:
+                firebaseAuth.signOut();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -99,4 +100,6 @@ public class MainActivity extends AppCompatActivity {
             firebaseAuth.removeAuthStateListener(authStateListener);
         }
     }
+
+
 }

@@ -2,6 +2,7 @@
     <string name="app_name">Masters at Work</string>
     <string name="settings_screen">Настройки</string>
     <string name="settings_write_to_developers">Написать разработчикам</string>
+    <string name="settings_sign_out">Выйти из аккаунта</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
