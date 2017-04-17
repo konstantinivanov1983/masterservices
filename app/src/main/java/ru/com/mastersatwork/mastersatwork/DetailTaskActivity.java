@@ -108,6 +108,7 @@ public class DetailTaskActivity extends AppCompatActivity {
                 task.setCustomersAddress(getIntent().getStringExtra("CUSTOMER_ADDRESS"));
                 task.setCustomersPhone(getIntent().getStringExtra("CUSTOMER_PHONE"));
                 task.setAssignedMaster(true);
+                task.setUid(getIntent().getStringExtra("USER_ID"));
 
                 Logger.d("Button is pressed");
 

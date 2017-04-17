@@ -42,10 +42,14 @@ public class MainActivity extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
+                    // TODO Get user info + uid.
+
+                    String uId = user.getUid();
+
                     // Get the ViewPager and set its PagerAdapter so that it can display items
                     ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
                     viewPager.setAdapter(new CustomFragmentPagerAdapter(getSupportFragmentManager(),
-                            MainActivity.this));
+                            MainActivity.this, uId));
 
                     // Give the TabLayout the ViewPager
                     TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);

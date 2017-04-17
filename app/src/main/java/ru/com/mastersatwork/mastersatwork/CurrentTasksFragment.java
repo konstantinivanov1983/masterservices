@@ -32,6 +32,7 @@ public class CurrentTasksFragment extends Fragment {
     private TaskCatalogAdapter adapter;
     private ProgressBar progressBar;
     private ArrayList<Task> data;
+    private String uId;
 
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mOrdersDatabaseReference;
@@ -39,14 +40,18 @@ public class CurrentTasksFragment extends Fragment {
     private Query query;
 
 
-    public static CurrentTasksFragment newInstance() {
+    public static CurrentTasksFragment newInstance(String userId) {
         CurrentTasksFragment fragment = new CurrentTasksFragment();
+        Bundle args = new Bundle();
+        args.putString("USER_ID", userId);
+        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        uId = getArguments().getString("USER_ID");
         adapter = new TaskCatalogAdapter(getActivity(), new ArrayList<Task>());
     }
 
@@ -61,6 +66,8 @@ public class CurrentTasksFragment extends Fragment {
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         );
+
+        Logger.d("Authenticated user id : " + uId);
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
 
@@ -90,6 +97,7 @@ public class CurrentTasksFragment extends Fragment {
                 intent.putExtra("JOB", adapter.getItem(position).getJob());
                 intent.putExtra("AMOUNT", adapter.getItem(position).getAmount());
                 intent.putExtra("COMMENT", adapter.getItem(position).getComment());
+                intent.putExtra("USER_ID", uId);
                 startActivity(intent);
             }
         });

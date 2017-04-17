@@ -31,6 +31,16 @@ public class Task {
 
     private String key;
 
+    private String uid;
+
+    public void setUid(String id) {
+        uid = id;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
     public void setOrderKey(String k) {
         this.key = k;
     }

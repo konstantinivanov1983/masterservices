@@ -11,10 +11,13 @@ public class CustomFragmentPagerAdapter extends FragmentPagerAdapter {
     final int PAGE_COUNT = 2;
     private String tabTitles[] = new String[] { "Текущие заказы", "Хроника"};
     private Context context;
+    private String uId;
 
-    public CustomFragmentPagerAdapter(FragmentManager fm, Context context) {
+    public CustomFragmentPagerAdapter(FragmentManager fm, Context context, String userId) {
         super(fm);
         this.context = context;
+        uId = userId;
+
     }
 
     @Override
@@ -24,7 +27,7 @@ public class CustomFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return CurrentTasksFragment.newInstance();
+        return CurrentTasksFragment.newInstance(uId);
     }
 
     @Override
