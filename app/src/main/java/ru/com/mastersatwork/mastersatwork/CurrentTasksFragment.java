@@ -152,5 +152,6 @@ public class CurrentTasksFragment extends Fragment {
     public void onPause() {
         super.onPause();
         detachDatabaseReadListener();
+        adapter.clear();
     }
 }
