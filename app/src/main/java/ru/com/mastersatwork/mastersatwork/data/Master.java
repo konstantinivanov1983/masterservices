@@ -1,9 +1,18 @@
 package ru.com.mastersatwork.mastersatwork.data;
 
+import com.google.firebase.database.Exclude;
+
+import java.util.ArrayList;
+
 public class Master {
+
+    @Exclude
     private String masterId;
+
     private String masterName;
     private String masterEmail;
+
+    private String assignedOrders;
 
     public Master(String masterId, String masterName, String masterEmail) {
         this.masterId = masterId;
@@ -11,6 +20,11 @@ public class Master {
         this.masterEmail = masterEmail;
     }
 
+    private void setAssignedOrders(String order) {
+        assignedOrders = order;
+    }
+
+    @Exclude
     public String getMasterId() {
         return masterId;
     }

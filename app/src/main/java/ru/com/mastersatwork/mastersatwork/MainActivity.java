@@ -13,7 +13,13 @@ import android.view.MenuItem;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import ru.com.mastersatwork.mastersatwork.data.Master;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -44,12 +50,16 @@ public class MainActivity extends AppCompatActivity {
                 if (user != null) {
                     // TODO Get user info + uid.
 
-                    String uId = user.getUid();
+                    String masterId = user.getUid();
+                    String masterEmail = user.getEmail();
+                    String masterName = user.getDisplayName();
+
+                    writeNewMasterIntoDatabase(masterId, masterName, masterEmail);
 
                     // Get the ViewPager and set its PagerAdapter so that it can display items
                     ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
                     viewPager.setAdapter(new CustomFragmentPagerAdapter(getSupportFragmentManager(),
-                            MainActivity.this, uId));
+                            MainActivity.this, masterId));
 
                     // Give the TabLayout the ViewPager
                     TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
@@ -67,6 +77,26 @@ public class MainActivity extends AppCompatActivity {
 
             }
         };
+    }
+
+    private void writeNewMasterIntoDatabase(final String id, String name, String mail) {
+
+        final Master master = new Master(id, name, mail);
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        final DatabaseReference databaseReference = firebaseDatabase.getReference().child("masters");
+
+        databaseReference.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.exists()) {
+                    databaseReference.child(id).setValue(master);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
+
     }
 
     @Override

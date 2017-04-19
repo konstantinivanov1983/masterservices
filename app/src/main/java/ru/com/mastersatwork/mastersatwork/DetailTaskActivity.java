@@ -117,6 +117,10 @@ public class DetailTaskActivity extends AppCompatActivity {
 
                 //databaseReference.push().setValue(task);
                 databaseReference.child(taskId).setValue(task);
+
+                // writing assigned order into master profile
+                DatabaseReference masterReference = database.getReference().child("masters").child(task.getUid());
+                masterReference.child("assignedOrders").setValue(taskId);
             }
         });
 
