@@ -2,6 +2,7 @@ package ru.com.mastersatwork.mastersatwork;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
@@ -18,6 +19,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.orhanobut.logger.Logger;
 
 import ru.com.mastersatwork.mastersatwork.data.Master;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
@@ -115,6 +117,10 @@ public class MainActivity extends AppCompatActivity {
         switch(item.getItemId()) {
             case R.id.settings_write_to_dev:
                 // TODO Create an intent for writing to developers.
+                Logger.d("SDK version: " + Build.VERSION.SDK_INT);
+                Logger.d("DEVICE: " + Build.DEVICE);
+                Logger.d("MODEL: " + Build.MODEL);
+                Logger.d("PRODUCT: " + Build.PRODUCT);
                 return true;
             case R.id.settings_sign_out:
                 firebaseAuth.signOut();
