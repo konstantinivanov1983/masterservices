@@ -7,6 +7,9 @@
         android:icon="@drawable/ic_settings"
         app:showAsAction="always"/>
     <item
+        android:id="@+id/settings_order_history"
+        android:title="@string/settings_order_history"/>
+    <item
         android:id="@+id/settings_write_to_dev"
         android:title="@string/settings_write_to_developers" />
     <item

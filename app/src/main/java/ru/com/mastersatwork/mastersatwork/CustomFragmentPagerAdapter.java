@@ -9,7 +9,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 public class CustomFragmentPagerAdapter extends FragmentPagerAdapter {
 
     final int PAGE_COUNT = 2;
-    private String tabTitles[] = new String[] { "Текущие заказы", "Хроника"};
+    private String tabTitles[] = new String[] { "Доступные заказы", "В работе"};
     private Context context;
     private String uId;
 
