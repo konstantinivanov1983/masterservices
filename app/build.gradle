@@ -20,7 +20,7 @@ android {
 }
 
 ext {
-    supportLibVersion = '25.2.0'  // variable that can be referenced to keep support libs consistent
+    //supportLibVersion = '25.3.1'  // variable that can be referenced to keep support libs consistent
 }
 
 dependencies {
@@ -28,16 +28,15 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile "com.android.support:appcompat-v7:${supportLibVersion}"
-    compile "com.android.support:design:${supportLibVersion}"
-    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile "com.android.support:appcompat-v7:"
+    compile "com.android.support:design:"
+
     compile 'com.squareup.retrofit2:retrofit:2.2.0'
     compile 'com.squareup.retrofit2:converter-gson:2.2.0'
     compile 'com.orhanobut:logger:1.15'
     compile 'uk.co.chrisjenx:calligraphy:2.2.0'
     compile 'com.google.firebase:firebase-database:10.2.0'
     compile 'com.google.firebase:firebase-messaging:10.2.0'
-    compile 'com.android.support:support-v4:25.3.1'
     testCompile 'junit:junit:4.12'
     compile 'com.firebaseui:firebase-ui-auth:1.2.0'
 }
