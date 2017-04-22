@@ -22,7 +22,7 @@ public class Task {
     private String job;
     @SerializedName("Amount")
     @Expose
-    private String amount;
+    private int amount;
     @SerializedName("Comment")
     @Expose
     private String comment;
@@ -89,11 +89,11 @@ public class Task {
         this.job = job;
     }
 
-    public String getAmount() {
+    public int getAmount() {
         return amount;
     }
 
-    public void setAmount(String amount) {
+    public void setAmount(int amount) {
         this.amount = amount;
     }
 

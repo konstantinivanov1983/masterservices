@@ -9,21 +9,10 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:background="@color/colorPrimaryDark"
+        android:layout_height="60dp"
+        android:background="@color/colorPrimary"
         android:gravity="center"
         android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/detail_order_number"
-            fontPath="fonts/robotocondensedlight.ttf"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="Заказ 10232323"
-            android:textColor="@color/colorDetail"
-            android:textSize="22sp"
-            tools:ignore="MissingPrefix" />
 
         <TextView
             android:id="@+id/detail_order_title"
@@ -48,6 +37,10 @@
             tools:ignore="MissingPrefix" />
 
     </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -111,7 +104,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:background="@android:color/transparent"
-                android:src="@drawable/cellphone_basic_24" />
+                android:src="@drawable/mobile_phone_32" />
 
         </LinearLayout>
 
@@ -192,6 +185,6 @@
 
     </LinearLayout>
 
-    .
+    </ScrollView>
 
 </LinearLayout>

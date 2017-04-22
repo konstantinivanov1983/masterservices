@@ -50,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                    // TODO Get user info + uid.
 
                     String masterId = user.getUid();
                     String masterEmail = user.getEmail();

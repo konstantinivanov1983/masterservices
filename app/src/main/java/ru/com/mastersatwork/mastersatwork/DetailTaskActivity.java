@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +22,8 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class DetailTaskActivity extends AppCompatActivity {
+
+    // TODO Implement listView + adapter?
 
     private TextView orderNumberView;
     private TextView jobView;
@@ -50,10 +53,9 @@ public class DetailTaskActivity extends AppCompatActivity {
         );
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Заказ: " + getIntent().getStringExtra("ORDER_ID"));
+        getSupportActionBar().setElevation(0);
 
-        orderNumberView = (TextView) findViewById(R.id.detail_order_number);
-        orderNumberView.setText("Заказ: " + getIntent().getStringExtra("ORDER_ID"));
-        Logger.d("Order ID: " + getIntent().getStringExtra("ORDER_ID"));
         jobView = (TextView) findViewById(R.id.detail_order_title);
         jobView.setText(getIntent().getStringExtra("JOB"));
         costView = (TextView) findViewById(R.id.detail_order_price);
@@ -104,7 +106,7 @@ public class DetailTaskActivity extends AppCompatActivity {
                 Logger.d("ORDER ID TO UPDATE: " + taskId);
 
                 Task task = new Task();
-                task.setAmount(getIntent().getStringExtra("AMOUNT"));
+                task.setAmount(getIntent().getIntExtra("AMOUNT", 0));
                 task.setJob(getIntent().getStringExtra("JOB"));
                 task.setComment(getIntent().getStringExtra("COMMENT"));
                 task.setCustomersName(getIntent().getStringExtra("CUSTOMER_NAME"));

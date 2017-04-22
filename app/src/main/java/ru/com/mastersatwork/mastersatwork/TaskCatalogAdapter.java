@@ -54,7 +54,8 @@ public class TaskCatalogAdapter extends ArrayAdapter<Task> {
         viewHolder.job.setText(task.getJob());
         viewHolder.address.setText(task.getCustomersAddress());
         Logger.d("Current price: " + task.getAmount());
-        viewHolder.cost.setText(task.getAmount());
+        int amount = task.getAmount();
+        viewHolder.cost.setText(String.valueOf(task.getAmount()));
 
         return convertView;
     }
