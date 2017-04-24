@@ -1,25 +1,19 @@
 package ru.com.mastersatwork.mastersatwork;
 
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.orhanobut.logger.Logger;
 
-import ru.com.mastersatwork.mastersatwork.data.Task;
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+import java.util.LinkedHashMap;
+
 
 public class DetailTaskActivity extends AppCompatActivity {
 
@@ -43,19 +37,38 @@ public class DetailTaskActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail_task);
-
-        // Setting custom fonts:
-        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                .setDefaultFontPath("fonts/proximanoval.ttf")
-                .setFontAttrId(R.attr.fontPath)
-                .build()
-        );
+        setContentView(R.layout.activity_detail_task_with_list_view);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Заказ: " + getIntent().getStringExtra("ORDER_ID"));
         getSupportActionBar().setElevation(0);
 
+
+
+        LinkedHashMap<String, String> map = new LinkedHashMap<>();
+        map.put("Клиент", "Константин");
+        map.put("Адрес", "Варшавское шоссе 18, к.1., кв. 21");
+        map.put("Телефон", "+79266676738");
+        map.put("Тип работы:", "Сделать стул");
+        map.put("Комментарий 1", "Сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул!" + "Сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул!" + "Сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул!" + "Сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул!" + "Сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул!" + "Сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул!");
+        map.put("Комментарий 1", "Сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул!" + "Сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул!" + "Сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул!" + "Сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул!" + "Сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул!" + "Сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул!");
+        map.put("Комментарий 2", "Сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул!" + "Сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул!" + "Сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул!" + "Сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул!" + "Сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул!" + "Сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул!");
+        map.put("Комментарий 3", "Сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул!" + "Сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул!" + "Сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул!" + "Сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул!" + "Сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул!" + "Сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул!");
+        map.put("Дата заказа", "24.10.1988");
+        map.put("Стоимость заказа", "1000 р.");
+
+
+        DetailAdapter adapter = new DetailAdapter(map);
+        ListView list = (ListView) findViewById(R.id.detail_task_list_view);
+        list.setAdapter(adapter);
+
+        /*
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Заказ: " + getIntent().getStringExtra("ORDER_ID"));
+        getSupportActionBar().setSubtitle("sdsdsdsd");
+        getSupportActionBar().setElevation(0);*/
+
+        /*
         jobView = (TextView) findViewById(R.id.detail_order_title);
         jobView.setText(getIntent().getStringExtra("JOB"));
         costView = (TextView) findViewById(R.id.detail_order_price);
@@ -94,6 +107,8 @@ public class DetailTaskActivity extends AppCompatActivity {
         commentView = (TextView) findViewById(R.id.detail_comment);
         commentView.setText(getIntent().getStringExtra("COMMENT"));
 
+
+
         Button takeOrderButton = (Button) findViewById(R.id.button_take_order);
         takeOrderButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,12 +142,7 @@ public class DetailTaskActivity extends AppCompatActivity {
             }
         });
 
-
-    }
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+        */
     }
 
     @Override

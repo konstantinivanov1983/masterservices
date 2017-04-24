@@ -1,6 +1,5 @@
 package ru.com.mastersatwork.mastersatwork;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,8 +21,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.orhanobut.logger.Logger;
 
 import ru.com.mastersatwork.mastersatwork.data.Master;
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,17 +28,12 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener authStateListener;
     private static final int RC_SIGN_IN = 2410;
 
+    private int[] imageResId = {R.drawable.clipboard_64_2, R.drawable.tools_64_2};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // Setting custom fonts:
-        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                .setDefaultFontPath("fonts/proximanoval.ttf")
-                .setFontAttrId(R.attr.fontPath)
-                .build()
-        );
 
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -65,6 +57,9 @@ public class MainActivity extends AppCompatActivity {
                     // Give the TabLayout the ViewPager
                     TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
                     tabLayout.setupWithViewPager(viewPager);
+                    tabLayout.getTabAt(0).setIcon(imageResId[0]);
+                    tabLayout.getTabAt(1).setIcon(imageResId[1]);
+
                 } else {
                     startActivityForResult(
                             AuthUI.getInstance()
@@ -98,11 +93,6 @@ public class MainActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {}
         });
 
-    }
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
     @Override

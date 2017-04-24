@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/rounded_corner">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Заказ № 2410198"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        android:id="@+id/work_in_progress_order_number"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="13dp" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/relativeLayout"></RelativeLayout>
+
+    <TextView
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="6dp"
+        android:text="Закрыть заказ"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:id="@+id/work_in_progress_close_order"
+        android:drawableRight="@drawable/ic_done_all_black_36px"
+        android:background="@drawable/rounded_corner2"
+        android:drawablePadding="8dp"
+        android:layout_marginRight="19dp"
+        android:layout_marginEnd="19dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:layout_below="@+id/work_in_progress_client_phone"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:id="@+id/work_in_progress_job_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="14dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="21dp"
+        android:text="Услуга: починить кран"
+        android:layout_below="@+id/work_in_progress_order_number"
+        android:layout_toRightOf="@+id/relativeLayout"
+        android:layout_toEndOf="@+id/relativeLayout" />
+
+    <TextView
+        android:id="@+id/work_in_progress_client_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Клиент: Евгений Козлов"
+        android:layout_below="@+id/work_in_progress_job_title"
+        android:layout_alignLeft="@+id/work_in_progress_job_title"
+        android:layout_alignStart="@+id/work_in_progress_job_title" />
+
+    <TextView
+        android:id="@+id/work_in_progress_client_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableRight="@drawable/ic_place_black_36px"
+        android:drawablePadding="4dp"
+        android:paddingRight="10dp"
+        android:text="Адрес клиента: Варшавское шоссе, 18, к.1, кв. 21"
+        android:layout_below="@+id/work_in_progress_client_name"
+        android:layout_alignLeft="@+id/work_in_progress_client_name"
+        android:layout_alignStart="@+id/work_in_progress_client_name"
+        android:layout_marginTop="11dp" />
+
+    <TextView
+        android:id="@+id/work_in_progress_client_phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Телефон клиента: +79266676738"
+        android:layout_below="@+id/work_in_progress_client_address"
+        android:layout_alignLeft="@+id/work_in_progress_client_address"
+        android:layout_alignStart="@+id/work_in_progress_client_address"
+        android:drawableRight="@drawable/ic_local_phone_black_36px"
+        android:drawablePadding="4dp"
+        android:layout_marginTop="12dp" />
+
+    <TextView
+        android:id="@+id/work_in_progress_job_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1000 р"
+        android:paddingRight="10dp"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimary"
+        android:layout_alignBaseline="@+id/work_in_progress_job_title"
+        android:layout_alignBottom="@+id/work_in_progress_job_title"
+        android:layout_alignRight="@+id/work_in_progress_close_order"
+        android:layout_alignEnd="@+id/work_in_progress_close_order" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Подробнее"
+        android:drawableRight="@drawable/ic_info_black_36px"
+        android:drawablePadding="4dp"
+        android:layout_alignTop="@+id/work_in_progress_close_order"
+        android:layout_alignLeft="@+id/work_in_progress_client_phone"
+        android:layout_alignStart="@+id/work_in_progress_client_phone" />
+
+</RelativeLayout>

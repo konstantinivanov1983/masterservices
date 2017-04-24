@@ -9,7 +9,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 public class CustomFragmentPagerAdapter extends FragmentPagerAdapter {
 
     final int PAGE_COUNT = 2;
-    private String tabTitles[] = new String[] { "Доступные заказы", "В работе"};
+    private String tabTitles[] = new String[] { "Новые заказы", "В работе"};
     private Context context;
     private String uId;
 
@@ -27,7 +27,11 @@ public class CustomFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
+        if (position == 0) {
         return CurrentTasksFragment.newInstance(uId);
+        } else {
+            return new WorkInProgressFragment();
+        }
     }
 
     @Override

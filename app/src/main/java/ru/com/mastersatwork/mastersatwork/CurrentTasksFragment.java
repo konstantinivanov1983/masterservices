@@ -22,7 +22,6 @@ import java.util.ArrayList;
 
 import okhttp3.OkHttpClient;
 import ru.com.mastersatwork.mastersatwork.data.Task;
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 public class CurrentTasksFragment extends Fragment {
 
@@ -59,13 +58,6 @@ public class CurrentTasksFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_current_tasks, container, false);
-
-        // Setting custom fonts:
-        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                .setDefaultFontPath("fonts/proximanoval.ttf")
-                .setFontAttrId(R.attr.fontPath)
-                .build()
-        );
 
         Logger.d("Authenticated user id : " + uId);
 
