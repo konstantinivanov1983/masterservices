@@ -10,13 +10,10 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Map;
 
-/**
- * Created by eugen on 22.04.2017.
- */
-
 public class DetailAdapter extends BaseAdapter {
 
     private final ArrayList mData;
+
 
     public static class ViewHolder {
         TextView key;
@@ -56,6 +53,7 @@ public class DetailAdapter extends BaseAdapter {
             viewHolder.image = (ImageButton) convertView.findViewById(R.id.detail_item_image);
             viewHolder.key = (TextView) convertView.findViewById(R.id.detail_item_key);
             viewHolder.value = (TextView) convertView.findViewById(R.id.detail_item_value);
+            viewHolder.image = (ImageButton) convertView.findViewById(R.id.detail_item_image);
 
             convertView.setTag(viewHolder);
         } else {
@@ -66,6 +64,25 @@ public class DetailAdapter extends BaseAdapter {
 
         viewHolder.key.setText(item.getKey());
         viewHolder.value.setText(item.getValue());
+
+        // Choosing pic:
+
+        switch(item.getKey()) {
+            case "Услуга": viewHolder.image.setImageResource(R.drawable.ic_work_black_36px);
+                break;
+            case "Стоимость": viewHolder.image.setImageResource(R.drawable.ic_payment_black_36px);
+                break;
+            case "Клиент": viewHolder.image.setImageResource(R.drawable.ic_perm_identity_black_36px);
+                break;
+            case "Адрес": viewHolder.image.setImageResource(R.drawable.ic_place_black_second_36px);
+                break;
+            case "Телефон": viewHolder.image.setImageResource(R.drawable.ic_phone_black_second_36px);
+                break;
+            case "Дата заказа": viewHolder.image.setImageResource(R.drawable.ic_date_range_black_36px);
+                break;
+            case "Комментарий": viewHolder.image.setImageResource(R.drawable.ic_comment_black_36px);
+                break;
+        }
 
         return convertView;
     }

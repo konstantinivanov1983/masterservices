@@ -1,17 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorWhiteWhite">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:background="@color/colorPrimary"
-        >
-
-
-    </RelativeLayout>
 
     <ListView
         android:id="@+id/detail_task_list_view"
@@ -22,12 +14,15 @@
         android:layout_weight="10"></ListView>
 
     <Button
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:layout_below="@+id/detail_task_list_view"
-        android:layout_gravity="center_horizontal"
+        android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Взять заказ"/>
+        android:layout_below="@+id/detail_task_list_view"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="0dp"
+        android:drawablePadding="6dp"
+        android:drawableRight="@drawable/rocket_32"
+        android:text="Взять заказ" />
 
 </LinearLayout>

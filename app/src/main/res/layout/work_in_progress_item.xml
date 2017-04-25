@@ -49,10 +49,11 @@
         android:layout_marginLeft="14dp"
         android:layout_marginStart="14dp"
         android:layout_marginTop="21dp"
-        android:text="Услуга: починить кран"
+        android:text="Услуга: Покрасить стены + положить паркет"
         android:layout_below="@+id/work_in_progress_order_number"
         android:layout_toRightOf="@+id/relativeLayout"
-        android:layout_toEndOf="@+id/relativeLayout" />
+        android:layout_alignRight="@+id/work_in_progress_order_number"
+        android:layout_alignEnd="@+id/work_in_progress_order_number" />
 
     <TextView
         android:id="@+id/work_in_progress_client_name"
@@ -71,11 +72,13 @@
         android:drawableRight="@drawable/ic_place_black_36px"
         android:drawablePadding="4dp"
         android:paddingRight="10dp"
-        android:text="Адрес клиента: Варшавское шоссе, 18, к.1, кв. 21"
+        android:text="Адрес: Варшавское шоссе, 18, к.1, кв. 21"
         android:layout_below="@+id/work_in_progress_client_name"
         android:layout_alignLeft="@+id/work_in_progress_client_name"
         android:layout_alignStart="@+id/work_in_progress_client_name"
-        android:layout_marginTop="11dp" />
+        android:layout_marginTop="11dp"
+        android:layout_alignRight="@+id/work_in_progress_close_order"
+        android:layout_alignEnd="@+id/work_in_progress_close_order" />
 
     <TextView
         android:id="@+id/work_in_progress_client_phone"
@@ -98,8 +101,7 @@
         android:textSize="16sp"
         android:textStyle="bold"
         android:textColor="@color/colorPrimary"
-        android:layout_alignBaseline="@+id/work_in_progress_job_title"
-        android:layout_alignBottom="@+id/work_in_progress_job_title"
+        android:layout_alignTop="@+id/work_in_progress_job_title"
         android:layout_alignRight="@+id/work_in_progress_close_order"
         android:layout_alignEnd="@+id/work_in_progress_close_order" />
 

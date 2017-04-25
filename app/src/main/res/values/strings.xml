@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Услуги мастера</string>
+    <string name="app_name">Еврокап: услуги мастеров</string>
     <string name="settings_screen">Настройки</string>
     <string name="settings_write_to_developers">Написать разработчикам</string>
     <string name="settings_sign_out">Выйти из аккаунта</string>

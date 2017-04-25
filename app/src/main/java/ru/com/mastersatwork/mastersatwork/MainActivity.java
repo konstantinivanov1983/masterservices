@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
                                     .createSignInIntentBuilder()
                                     .setProviders(AuthUI.EMAIL_PROVIDER, AuthUI.GOOGLE_PROVIDER)
                                     .setIsSmartLockEnabled(false)
+                                    .setTheme(R.style.FullscreenTheme)
                                     .build()
                             ,
                             RC_SIGN_IN);
