@@ -28,7 +28,7 @@ public class WorkInProgressFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_current_tasks, container, false);
+        View view = inflater.inflate(R.layout.work_in_progress_fragment, container, false);
 
 
         // With fake data:
@@ -66,8 +66,12 @@ public class WorkInProgressFragment extends Fragment {
         tasks.add(task2);
         tasks.add(task3);
 
+
+        ListView listView = (ListView) view.findViewById(R.id.list_view_work_in_progress);
+        View emptyView = view.findViewById(R.id.empty_view);
+        listView.setEmptyView(emptyView);
+
         WorkInProgressAdapter adapter = new WorkInProgressAdapter(getActivity(), tasks);
-        ListView listView = (ListView) view.findViewById(R.id.list_view_current_tasks);
         listView.setAdapter(adapter);
 
         return view;

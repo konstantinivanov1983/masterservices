@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -42,7 +43,7 @@ public class DetailAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, final ViewGroup parent) {
 
         ViewHolder viewHolder;
 
@@ -75,8 +76,22 @@ public class DetailAdapter extends BaseAdapter {
             case "Клиент": viewHolder.image.setImageResource(R.drawable.ic_perm_identity_black_36px);
                 break;
             case "Адрес": viewHolder.image.setImageResource(R.drawable.ic_place_black_second_36px);
+                viewHolder.image.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(parent.getContext(), "Смотрим на карте", Toast.LENGTH_SHORT).show();
+                        // TODO Create an intent to use google maps
+                    }
+                });
                 break;
             case "Телефон": viewHolder.image.setImageResource(R.drawable.ic_phone_black_second_36px);
+                viewHolder.image.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(parent.getContext(), "Набираем номер!", Toast.LENGTH_SHORT).show();
+                        //TODO Create an intent to dial a phone number.
+                    }
+                });
                 break;
             case "Дата заказа": viewHolder.image.setImageResource(R.drawable.ic_date_range_black_36px);
                 break;
