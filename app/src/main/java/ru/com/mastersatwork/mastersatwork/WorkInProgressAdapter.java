@@ -1,6 +1,7 @@
 package ru.com.mastersatwork.mastersatwork;
 
 import android.content.Context;
+import android.support.v4.app.FragmentManager;
 import android.text.Html;
 import android.text.Spanned;
 import android.view.LayoutInflater;
@@ -11,12 +12,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import ru.com.mastersatwork.mastersatwork.R;
 import ru.com.mastersatwork.mastersatwork.data.Task;
 
 public class WorkInProgressAdapter extends ArrayAdapter<Task> {
 
     private ArrayList<Task> data;
+    private Context mContext;
+    private CallBackFromAdapter mCallback;
 
     public static class ViewHolder {
         TextView job;
@@ -31,6 +33,7 @@ public class WorkInProgressAdapter extends ArrayAdapter<Task> {
     public WorkInProgressAdapter(Context context, ArrayList<Task> tasks) {
         super(context, 0, tasks);
         data = tasks;
+        mContext = context;
     }
 
     @SuppressWarnings("deprecation")
@@ -99,6 +102,7 @@ public class WorkInProgressAdapter extends ArrayAdapter<Task> {
             public void onClick(View v) {
                 Toast.makeText(parent.getContext(), "Закроем заказ", Toast.LENGTH_SHORT).show();
                 // TODO create an intent
+                mCallback.showAlertDialogInsideAdapter();
             }
         });
 
@@ -110,6 +114,17 @@ public class WorkInProgressAdapter extends ArrayAdapter<Task> {
             }
         });
 
+
         return convertView;
     }
+
+    public interface CallBackFromAdapter {
+
+        void showAlertDialogInsideAdapter();
+    }
+
+    public void setCallback(CallBackFromAdapter callback) {
+        mCallback = callback;
+    }
+
 }

@@ -2,22 +2,23 @@ package ru.com.mastersatwork.mastersatwork;
 
 
 import android.os.Bundle;
+
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import ru.com.mastersatwork.mastersatwork.data.Task;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class WorkInProgressFragment extends Fragment {
+public class WorkInProgressFragment extends Fragment implements ClosingOrderDialogFragment.EditCommentDialogListener {
 
+    private WorkInProgressAdapter adapter;
 
     public WorkInProgressFragment() {
         // Required empty public constructor
@@ -71,10 +72,30 @@ public class WorkInProgressFragment extends Fragment {
         View emptyView = view.findViewById(R.id.empty_view);
         listView.setEmptyView(emptyView);
 
-        WorkInProgressAdapter adapter = new WorkInProgressAdapter(getActivity(), tasks);
+        adapter = new WorkInProgressAdapter(getContext(), tasks);
+        adapter.setCallback(new WorkInProgressAdapter.CallBackFromAdapter() {
+            @Override
+            public void showAlertDialogInsideAdapter() {
+                FragmentManager fm = getChildFragmentManager();
+                ClosingOrderDialogFragment fragment = ClosingOrderDialogFragment.newInstance("Закрытие заказа № 2410198819");
+                fragment.setTargetFragment(WorkInProgressFragment.this, 300);
+                fragment.show(fm, "some tag");
+            }
+        });
+
         listView.setAdapter(adapter);
 
         return view;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        adapter.setCallback(null);
+    }
+
+    @Override
+    public void onFinishCommentDialog(String inputText) {
+        Toast.makeText(getContext(), "Here's your comment: " + inputText, Toast.LENGTH_SHORT).show();
+    }
 }
