@@ -25,12 +25,8 @@ import ru.com.mastersatwork.mastersatwork.data.Task;
 
 public class CurrentTasksFragment extends Fragment {
 
-    public static final String API_BASE_URL = "http://149.126.103.38";
-    private OkHttpClient.Builder httpClient;
-    private TaskApi taskApi;
     private TaskCatalogAdapter adapter;
     private ProgressBar progressBar;
-    private ArrayList<Task> data;
     private String uId;
 
     private FirebaseDatabase mFirebaseDatabase;

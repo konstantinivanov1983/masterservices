@@ -24,7 +24,6 @@ public class WorkInProgressFragment extends Fragment implements ClosingOrderDial
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -33,7 +32,9 @@ public class WorkInProgressFragment extends Fragment implements ClosingOrderDial
 
 
         // With fake data:
+
         Task task = new Task();
+        task.setOrderNumber("1");
         task.setAmount(1000);
         task.setCustomersAddress("Варшавское шоссе, 18, к.1, кв. 101");
         task.setJob("Покрасить стены");
@@ -42,6 +43,7 @@ public class WorkInProgressFragment extends Fragment implements ClosingOrderDial
 
         Task task1 = new Task();
         task1.setAmount(1000);
+        task1.setOrderNumber("2");
         task1.setCustomersAddress("Адрес: Варшавское шоссе, 18, к.1");
         task1.setJob("Покрасить стены + положить паркет");
         task1.setCustomersName("Евгений Козлов");
@@ -49,6 +51,7 @@ public class WorkInProgressFragment extends Fragment implements ClosingOrderDial
 
         Task task2 = new Task();
         task2.setAmount(1000);
+        task2.setOrderNumber("3");
         task2.setCustomersAddress("Варшавское шоссе, 18, к.1");
         task2.setJob("Покрасить стены и перевезти мебель");
         task2.setCustomersName("Евгений Козлов");
@@ -56,6 +59,7 @@ public class WorkInProgressFragment extends Fragment implements ClosingOrderDial
 
         Task task3 = new Task();
         task3.setAmount(1000);
+        task3.setOrderNumber("4");
         task3.setCustomersAddress("Варшавское шоссе, 18, к.1");
         task3.setJob("Ремонт на балконе (застеклить)");
         task3.setCustomersName("Евгений Козлов");
@@ -75,9 +79,9 @@ public class WorkInProgressFragment extends Fragment implements ClosingOrderDial
         adapter = new WorkInProgressAdapter(getContext(), tasks);
         adapter.setCallback(new WorkInProgressAdapter.CallBackFromAdapter() {
             @Override
-            public void showAlertDialogInsideAdapter() {
+            public void showAlertDialogInsideAdapter(String order, int price) {
                 FragmentManager fm = getChildFragmentManager();
-                ClosingOrderDialogFragment fragment = ClosingOrderDialogFragment.newInstance("Закрытие заказа № 2410198819");
+                ClosingOrderDialogFragment fragment = ClosingOrderDialogFragment.newInstance(order, price);
                 fragment.setTargetFragment(WorkInProgressFragment.this, 300);
                 fragment.show(fm, "some tag");
             }
@@ -95,7 +99,7 @@ public class WorkInProgressFragment extends Fragment implements ClosingOrderDial
     }
 
     @Override
-    public void onFinishCommentDialog(String inputText) {
-        Toast.makeText(getContext(), "Here's your comment: " + inputText, Toast.LENGTH_SHORT).show();
+    public void onFinishCommentDialog(int receivedPrice, String receivedComment) {
+        Toast.makeText(getContext(), "Ваш комментарий: " + receivedComment +"\nПолученная Вами сумма: " + receivedPrice, Toast.LENGTH_LONG).show();
     }
 }

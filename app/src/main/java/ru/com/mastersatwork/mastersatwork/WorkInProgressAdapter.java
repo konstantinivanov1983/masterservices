@@ -17,7 +17,6 @@ import ru.com.mastersatwork.mastersatwork.data.Task;
 public class WorkInProgressAdapter extends ArrayAdapter<Task> {
 
     private ArrayList<Task> data;
-    private Context mContext;
     private CallBackFromAdapter mCallback;
 
     public static class ViewHolder {
@@ -33,7 +32,6 @@ public class WorkInProgressAdapter extends ArrayAdapter<Task> {
     public WorkInProgressAdapter(Context context, ArrayList<Task> tasks) {
         super(context, 0, tasks);
         data = tasks;
-        mContext = context;
     }
 
     @SuppressWarnings("deprecation")
@@ -49,7 +47,7 @@ public class WorkInProgressAdapter extends ArrayAdapter<Task> {
 
     @Override
     public View getView(int position, View convertView, final ViewGroup parent) {
-        Task task = getItem(position);
+        final Task task = getItem(position);
 
         ViewHolder viewHolder;
 
@@ -102,7 +100,7 @@ public class WorkInProgressAdapter extends ArrayAdapter<Task> {
             public void onClick(View v) {
                 Toast.makeText(parent.getContext(), "Закроем заказ", Toast.LENGTH_SHORT).show();
                 // TODO create an intent
-                mCallback.showAlertDialogInsideAdapter();
+                mCallback.showAlertDialogInsideAdapter(task.getOrderNumber(), task.getAmount());
             }
         });
 
@@ -120,7 +118,7 @@ public class WorkInProgressAdapter extends ArrayAdapter<Task> {
 
     public interface CallBackFromAdapter {
 
-        void showAlertDialogInsideAdapter();
+        void showAlertDialogInsideAdapter(String order, int price);
     }
 
     public void setCallback(CallBackFromAdapter callback) {
