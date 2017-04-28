@@ -80,7 +80,7 @@ public class WorkInProgressFragment extends Fragment implements ClosingOrderDial
         adapter.setCallback(new WorkInProgressAdapter.CallBackFromAdapter() {
             @Override
             public void showAlertDialogInsideAdapter(String order, int price) {
-                FragmentManager fm = getChildFragmentManager();
+                FragmentManager fm = getFragmentManager();
                 ClosingOrderDialogFragment fragment = ClosingOrderDialogFragment.newInstance(order, price);
                 fragment.setTargetFragment(WorkInProgressFragment.this, 300);
                 fragment.show(fm, "some tag");
