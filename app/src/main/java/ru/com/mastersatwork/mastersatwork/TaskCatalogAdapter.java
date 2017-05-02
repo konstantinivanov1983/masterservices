@@ -7,15 +7,26 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 
+import ru.com.mastersatwork.mastersatwork.data.Customer;
 import ru.com.mastersatwork.mastersatwork.data.Task;
+import ru.com.mastersatwork.mastersatwork.data.Work;
 
 public class TaskCatalogAdapter extends ArrayAdapter<Task> {
 
+
+    private FirebaseDatabase firebaseDatabase;
     private ArrayList<Task> tasks;
+    private Customer customer;
 
     public static class ViewHolder {
         TextView job;
@@ -26,15 +37,16 @@ public class TaskCatalogAdapter extends ArrayAdapter<Task> {
     public TaskCatalogAdapter(Context context, ArrayList<Task> tasks) {
         super(context, 0, tasks);
         this.tasks = tasks;
+        firebaseDatabase = FirebaseDatabase.getInstance();
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
         // Получаем данные по опр. позиции в массиве
-        Task task = getItem(position);
+        final Task task = getItem(position);
 
-        ViewHolder viewHolder;
+        final ViewHolder viewHolder;
 
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
@@ -51,18 +63,43 @@ public class TaskCatalogAdapter extends ArrayAdapter<Task> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.job.setText(task.getJob());
-        viewHolder.address.setText(task.getCustomersAddress());
-        Logger.d("Current price: " + task.getAmount());
-        viewHolder.cost.setText(String.valueOf(task.getAmount()) + " \u20BD");
+        DatabaseReference workRef = firebaseDatabase.getReference().child("works").child(task.getWork());
+        workRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Work work = dataSnapshot.getValue(Work.class);
+                if (work != null) {
+                    viewHolder.job.setText(work.getName());
+                    notifyDataSetChanged();
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
+
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = firebaseDatabase.getReference().child("customers").child(task.getCustomer());
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                customer = dataSnapshot.getValue(Customer.class);
+                if (customer != null ){
+                    viewHolder.address.setText(customer.getPublicAddress());
+                    viewHolder.cost.setText(String.valueOf(task.getInitialAmount()) + " \u20BD");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
 
         return convertView;
     }
 
-    public void removeItemByFirebaseId(String firebaseId) {
+    public void removeItemByFirebaseId(String idOrder) {
         if (tasks != null & tasks.size()>0) {
             for (Task task : tasks) {
-                if (task.getOrderKey().equals(firebaseId)) {
+                if (task.getIdOrders().equals(idOrder)) {
                     tasks.remove(task);
                     notifyDataSetChanged();
                     return;

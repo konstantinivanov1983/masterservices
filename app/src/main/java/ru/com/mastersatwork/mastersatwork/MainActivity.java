@@ -3,6 +3,7 @@ package ru.com.mastersatwork.mastersatwork;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -21,6 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.orhanobut.logger.Logger;
 
 import ru.com.mastersatwork.mastersatwork.data.Master;
+import ru.com.mastersatwork.mastersatwork.utils.Utils;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -142,4 +144,11 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+    @Override
+    protected void onDestroy(){
+        Logger.d("In Main Activity: \n" + "DESTROYDESTROYDESTROYDESTROYDESTROYDESTROYDESTROY");
+        super.onDestroy();
+    }
+
 }

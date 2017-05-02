@@ -5,105 +5,50 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.orhanobut.logger.Logger;
 
 import java.util.LinkedHashMap;
 
 
 public class DetailTaskActivity extends AppCompatActivity {
 
-    // TODO Implement listView + adapter?
-
-    private TextView orderNumberView;
-    private TextView jobView;
-    private TextView costView;
-    private TextView customerNameView;
-    private TextView customerAddressView;
-    private TextView customerPhoneView;
-    private TextView commentView;
-    private String map;
-    private String phone;
-    private ImageButton buttonPhone;
-    private ImageButton buttonMap;
-
     private DatabaseReference databaseReference;
     private FirebaseDatabase database;
+    private String masterId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_task_with_list_view);
 
+        masterId = getIntent().getStringExtra("MASTER_ID");
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Заказ: " + "241031313");
+        getSupportActionBar().setTitle("Заказ: " + getIntent().getStringExtra("ORDER_ID_FIREBASE"));
 
         LinkedHashMap<String, String> map = new LinkedHashMap<>();
-        map.put("Услуга", "Покрасить пол и стены");
-        map.put("Стоимость", "1000 р.");
-        map.put("Клиент", "Константин");
-        map.put("Адрес", "Варшавское шоссе 18, к.1., кв. 21");
-        map.put("Телефон", "+79266676738");
-        map.put("Комментарий", "Сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул!" + "Сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул!" + "Сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул!" + "Сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул!" + "Сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул!" + "Сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул, пожалуйста, сделайте стул!");
-        map.put("Дата заказа", "24.10.1988");
-
+         map.put("Услуга", getIntent().getStringExtra("JOB"));
+        map.put("Стоимость", String.valueOf(getIntent().getIntExtra("AMOUNT", 0)));
+        map.put("Клиент", getIntent().getStringExtra("CUSTOMER_NAME"));
+        map.put("Адрес", getIntent().getStringExtra("CUSTOMER_ADDRESS"));
+        map.put("Комментарий", getIntent().getStringExtra("COMMENT"));
 
         DetailAdapter adapter = new DetailAdapter(map);
         ListView list = (ListView) findViewById(R.id.detail_task_list_view);
         list.setAdapter(adapter);
 
-        /*
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Заказ: " + getIntent().getStringExtra("ORDER_ID"));
-        getSupportActionBar().setSubtitle("sdsdsdsd");
-        getSupportActionBar().setElevation(0);*/
 
-        /*
-        jobView = (TextView) findViewById(R.id.detail_order_title);
-        jobView.setText(getIntent().getStringExtra("JOB"));
-        costView = (TextView) findViewById(R.id.detail_order_price);
-        costView.setText(getIntent().getStringExtra("AMOUNT") + " \u20BD");
-        customerNameView = (TextView) findViewById(R.id.detail_client_name);
-        customerNameView.setText(getIntent().getStringExtra("CUSTOMER_NAME"));
+        // Buttons part
 
-        String address = getIntent().getStringExtra("CUSTOMER_ADDRESS");
-        map = "http://maps.google.co.in/maps?q="+ address;
-        customerAddressView = (TextView) findViewById(R.id.detail_client_adress);
-        customerAddressView.setText(address);
-
-        buttonMap = (ImageButton) findViewById(R.id.image_button_maps);
-        buttonMap.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(map));
-                startActivity(intent);
-            }
-        });
-
-        phone = getIntent().getStringExtra("CUSTOMER_PHONE");
-        customerPhoneView = (TextView) findViewById(R.id.detail_client_phone);
-        customerPhoneView.setText(phone);
-
-        buttonPhone = (ImageButton) findViewById(R.id.image_button_phone);
-        buttonPhone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_DIAL);
-                intent.setData(Uri.parse("tel:" + phone));
-                startActivity(intent);
-            }
-        });
-
-        commentView = (TextView) findViewById(R.id.detail_comment);
-        commentView.setText(getIntent().getStringExtra("COMMENT"));
-
-
-
-        Button takeOrderButton = (Button) findViewById(R.id.button_take_order);
+        Button takeOrderButton = (Button) findViewById(R.id.detail_task_take_order);
         takeOrderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -111,32 +56,13 @@ public class DetailTaskActivity extends AppCompatActivity {
                 database = FirebaseDatabase.getInstance();
                 databaseReference = database.getReference().child("orders");
 
-                String taskId = getIntent().getStringExtra("FIREBASE_ORDER_KEY");
-                Logger.d("ORDER ID TO UPDATE: " + taskId);
-
-                Task task = new Task();
-                task.setAmount(getIntent().getIntExtra("AMOUNT", 0));
-                task.setJob(getIntent().getStringExtra("JOB"));
-                task.setComment(getIntent().getStringExtra("COMMENT"));
-                task.setCustomersName(getIntent().getStringExtra("CUSTOMER_NAME"));
-                task.setCustomersAddress(getIntent().getStringExtra("CUSTOMER_ADDRESS"));
-                task.setCustomersPhone(getIntent().getStringExtra("CUSTOMER_PHONE"));
-                task.setAssignedMaster(true);
-                task.setUid(getIntent().getStringExtra("USER_ID"));
-
-                Logger.d("Button is pressed");
+                String taskId = getIntent().getStringExtra("ORDER_ID_FIREBASE");
 
                 //databaseReference.push().setValue(task);
-                databaseReference.child(taskId).setValue(task);
-                database.getReference().child("assigned_orders").child(taskId).setValue(task);
-
-                // writing assigned order into master profile
-                DatabaseReference masterReference = database.getReference().child("masters").child(task.getUid());
-                masterReference.child("assignedOrders").child(taskId).setValue(true);
+                databaseReference.child(taskId).child("status").setValue(1);
+                databaseReference.child(taskId).child("Master").setValue(masterId);
             }
         });
-
-        */
     }
 
     @Override

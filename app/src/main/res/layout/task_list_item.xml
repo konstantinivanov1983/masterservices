@@ -30,15 +30,13 @@
         android:id="@+id/list_item_job"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#000000"
-        android:text="Работа, которую следует выполнить warshav"/>
+        android:textColor="#282626" />
 
     <TextView
         android:id="@+id/list_item_adress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/list_item_job"
-        android:text="Адрес: Варшавскоен шоссе, 18, к.1, Москва, Warschavskoe"
         />
 
     </LinearLayout>

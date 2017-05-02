@@ -30,7 +30,7 @@ public class CustomFragmentPagerAdapter extends FragmentPagerAdapter {
         if (position == 0) {
         return CurrentTasksFragment.newInstance(uId);
         } else {
-            return new WorkInProgressFragment();
+            return new WorkInProgressFragment().newInstance(uId);
         }
     }
 

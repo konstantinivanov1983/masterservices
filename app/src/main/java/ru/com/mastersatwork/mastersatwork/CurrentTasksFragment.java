@@ -16,23 +16,29 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 
 import okhttp3.OkHttpClient;
+import ru.com.mastersatwork.mastersatwork.data.Customer;
 import ru.com.mastersatwork.mastersatwork.data.Task;
+import ru.com.mastersatwork.mastersatwork.data.Work;
+import ru.com.mastersatwork.mastersatwork.utils.Utils;
 
 public class CurrentTasksFragment extends Fragment {
 
     private TaskCatalogAdapter adapter;
     private ProgressBar progressBar;
     private String uId;
+    private Customer customer;
 
-    private FirebaseDatabase mFirebaseDatabase;
+    private static FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mOrdersDatabaseReference;
     private ChildEventListener mChildEventListener;
     private Query query;
+    private DatabaseReference mCustomerDbRef;
 
 
     public static CurrentTasksFragment newInstance(String userId) {
@@ -57,39 +63,87 @@ public class CurrentTasksFragment extends Fragment {
 
         Logger.d("Authenticated user id : " + uId);
 
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-
-        mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("orders");
-
-        query = mOrdersDatabaseReference.orderByChild("assignedMaster").equalTo(false);
-        query.keepSynced(true);
-
+        progressBar = (ProgressBar) view.findViewById(R.id.progress_bar_in_current_tasks);
 
         ListView listView = (ListView) view.findViewById(R.id.list_view_current_tasks);
 
-        listView.setAdapter(adapter);
+        // Check internet connection
+        if (!Utils.isOnline(getContext())) {
+            View emptyView = view.findViewById(R.id.no_connnection_view);
+            listView.setEmptyView(emptyView);
+            progressBar.setVisibility(View.GONE);
+            Logger.d("No connection");
+        } else {
 
-        progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
+            View emptyView = view.findViewById(R.id.no_connnection_view);
+            emptyView.setVisibility(View.GONE);
 
-        attachDatabaseReadListener();
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), DetailTaskActivity.class);
-                intent.putExtra("ORDER_ID", adapter.getItem(position).getOrderNumber());
-                intent.putExtra("FIREBASE_ORDER_KEY", adapter.getItem(position).getOrderKey());
-                Logger.d("ORDER_ID in CurrentTasksFragment: " + adapter.getItem(position).getOrderNumber());
-                intent.putExtra("CUSTOMER_NAME", adapter.getItem(position).getCustomersName());
-                intent.putExtra("CUSTOMER_ADDRESS", adapter.getItem(position).getCustomersAddress());
-                intent.putExtra("CUSTOMER_PHONE", adapter.getItem(position).getCustomersPhone());
-                intent.putExtra("JOB", adapter.getItem(position).getJob());
-                intent.putExtra("AMOUNT", adapter.getItem(position).getAmount());
-                intent.putExtra("COMMENT", adapter.getItem(position).getComment());
-                intent.putExtra("USER_ID", uId);
-                startActivity(intent);
-            }
-        });
+            Logger.d("Else else else");
+
+            mFirebaseDatabase = FirebaseDatabase.getInstance();
+
+            mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("orders");
+            mCustomerDbRef = mFirebaseDatabase.getReference().child("customers");
+
+            query = mOrdersDatabaseReference.orderByChild("status").equalTo(0);
+            query.keepSynced(true);
+
+            listView.setAdapter(adapter);
+
+            attachDatabaseReadListener();
+
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, final int position, long id) {
+
+                    // Going to Detail Activity for a list item
+                    final boolean[] custDownloadFinished = {false};
+
+                    final Intent intent = new Intent(getActivity(), DetailTaskActivity.class);
+                    intent.putExtra("ORDER_NUM", "NONUMNONUM");
+                    intent.putExtra("AMOUNT", adapter.getItem(position).getInitialAmount());
+                    intent.putExtra("COMMENT", adapter.getItem(position).getCustomerComment());
+                    intent.putExtra("MASTER_ID", uId);
+
+                    final DatabaseReference workRef = mFirebaseDatabase.getReference().child("works").child(adapter.getItem(position).getWork());
+                    workRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Work work = dataSnapshot.getValue(Work.class);
+                            if (work != null) {
+                                intent.putExtra("JOB", work.getName());
+                                custDownloadFinished[0] = true;
+                            }
+
+                            final DatabaseReference custRef = mFirebaseDatabase.getReference().child("customers").child(adapter.getItem(position).getCustomer());
+                            custRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    customer = dataSnapshot.getValue(Customer.class);
+                                    if (customer != null ){
+                                        intent.putExtra("CUSTOMER_NAME", customer.getName());
+                                        intent.putExtra("CUSTOMER_ADDRESS", customer.getPublicAddress());
+                                        intent.putExtra("ORDER_ID_FIREBASE", adapter.getItem(position).getIdOrders());
+                                        custRef.removeEventListener(this);
+                                        startActivity(intent);
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {}
+                            });
+
+                            if (custDownloadFinished[0] == true) {
+                                workRef.removeEventListener(this);
+                            }
+                        }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {}
+                    });
+                }
+            });
+        }
 
         return view;
     }
@@ -104,30 +158,26 @@ public class CurrentTasksFragment extends Fragment {
                         progressBar.setVisibility(View.INVISIBLE);
                     }
                     Task newOrder = dataSnapshot.getValue(Task.class);
-                    String key = dataSnapshot.getKey();
-                    newOrder.setOrderKey(key);
-                    Logger.d("dataSnapshot.getKey(): " + dataSnapshot.getKey());
-                    Logger.d("Order ID in onChildAdded: " + newOrder.getOrderKey());
 
                     //Adding only those orders which have no master assigned:
-                    if (newOrder.getAssignedMaster() == false) {
+                    if (newOrder.getMaster() == null) {
                         adapter.add(newOrder);
                     }
-
                 }
 
                 @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
 
-                }
                 @Override
                 public void onChildRemoved(DataSnapshot dataSnapshot) {
                     adapter.removeItemByFirebaseId(dataSnapshot.getKey());
-                    query = mOrdersDatabaseReference.orderByChild("assignedMaster").equalTo(false);
+                    query = mOrdersDatabaseReference.orderByChild("status").equalTo(0);
 
                 }
+
                 @Override
                 public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+
                 @Override
                 public void onCancelled(DatabaseError databaseError) {}
             };
@@ -139,7 +189,6 @@ public class CurrentTasksFragment extends Fragment {
 
     private void detachDatabaseReadListener() {
         if (mChildEventListener != null) {
-            //mOrdersDatabaseReference.removeEventListener(mChildEventListener);
             query.removeEventListener(mChildEventListener);
             mChildEventListener = null;
         }

@@ -1,116 +1,157 @@
 package ru.com.mastersatwork.mastersatwork.data;
 
+import com.google.firebase.database.PropertyName;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Task {
 
-    @SerializedName("OrderNumber")
+    @PropertyName("Customer")
     @Expose
-    private String orderNumber;
-    @SerializedName("CustomersName")
+    private String customer;
+    @SerializedName("CustomerComment")
     @Expose
-    private String customersName;
-    @SerializedName("CustomersAddress")
+    private String customerComment;
+    @SerializedName("District")
     @Expose
-    private String customersAddress;
-    @SerializedName("CustomersPhone")
+    private String district;
+
+    @PropertyName("InitialAmount")
     @Expose
-    private String customersPhone;
-    @SerializedName("Job")
+    private int initialAmount;
+
+    @SerializedName("Master")
     @Expose
-    private String job;
-    @SerializedName("Amount")
+    private String master;
+    @SerializedName("MasterComment")
     @Expose
-    private int amount;
-    @SerializedName("Comment")
+    private String masterComment;
+    @SerializedName("TotalAmount")
     @Expose
-    private String comment;
+    private int totalAmount;
 
-    private boolean assignedMaster;
+    @PropertyName("Work")
+    @Expose
+    private String work;
 
-    private String key;
+    @SerializedName("endDate")
+    @Expose
+    private String endDate;
+    @SerializedName("formationDate")
+    @Expose
+    private String formationDate;
+    @SerializedName("idOrders")
+    @Expose
+    private String idOrders;
+    @SerializedName("status")
+    @Expose
+    private Integer status;
+    @SerializedName("takenDate")
+    @Expose
+    private String takenDate;
 
-    private String uid;
-
-    public void setUid(String id) {
-        uid = id;
+    public String getCustomer() {
+        return customer;
     }
 
-    public String getUid() {
-        return uid;
+    public void setCustomer(String customer) {
+        this.customer = customer;
     }
 
-    public void setOrderKey(String k) {
-        this.key = k;
+    public String getCustomerComment() {
+        return customerComment;
     }
 
-    public String getOrderKey() {
-        return key;
+    public void setCustomerComment(String customerComment) {
+        this.customerComment = customerComment;
     }
 
-    public String getOrderNumber() {
-        return orderNumber;
+    public String getDistrict() {
+        return district;
     }
 
-    public void setOrderNumber(String orderNumber) {
-        this.orderNumber = orderNumber;
+    public void setDistrict(String district) {
+        this.district = district;
     }
 
-    public String getCustomersName() {
-        return customersName;
+    public int getInitialAmount() {
+        return initialAmount;
     }
 
-    public void setCustomersName(String customersName) {
-        this.customersName = customersName;
+    public void setInitialAmount(int initialAmount) {
+        this.initialAmount = initialAmount;
     }
 
-    public String getCustomersAddress() {
-        return customersAddress;
+    public String getMaster() {
+        return master;
     }
 
-    public void setCustomersAddress(String customersAddress) {
-        this.customersAddress = customersAddress;
+    public void setMaster(String master) {
+        this.master = master;
     }
 
-    public String getCustomersPhone() {
-        return customersPhone;
+    public String getMasterComment() {
+        return masterComment;
     }
 
-    public void setCustomersPhone(String customersPhone) {
-        this.customersPhone = customersPhone;
+    public void setMasterComment(String masterComment) {
+        this.masterComment = masterComment;
     }
 
-    public String getJob() {
-        return job;
+    public int getTotalAmount() {
+        return totalAmount;
     }
 
-    public void setJob(String job) {
-        this.job = job;
+    public void setTotalAmount(int totalAmount) {
+        this.totalAmount = totalAmount;
     }
 
-    public int getAmount() {
-        return amount;
+    public String getWork() {
+        return work;
     }
 
-    public void setAmount(int amount) {
-        this.amount = amount;
+    public void setWork(String work) {
+        this.work = work;
     }
 
-    public String getComment() {
-        return comment;
+    public String getEndDate() {
+        return endDate;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
 
-    public void setAssignedMaster(boolean state) {
-        this.assignedMaster = state;
+    public String getFormationDate() {
+        return formationDate;
     }
 
-    public boolean getAssignedMaster() {
-        return assignedMaster;
+    public void setFormationDate(String formationDate) {
+        this.formationDate = formationDate;
+    }
+
+    public String getIdOrders() {
+        return idOrders;
+    }
+
+    public void setIdOrders(String idOrders) {
+        this.idOrders = idOrders;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public String getTakenDate() {
+        return takenDate;
+    }
+
+    public void setTakenDate(String takenDate) {
+        this.takenDate = takenDate;
     }
 
 }

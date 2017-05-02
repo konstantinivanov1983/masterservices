@@ -1,8 +1,11 @@
 package ru.com.mastersatwork.mastersatwork;
 
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
@@ -11,6 +14,13 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+
 import java.util.ArrayList;
 
 import ru.com.mastersatwork.mastersatwork.data.Task;
@@ -18,10 +28,28 @@ import ru.com.mastersatwork.mastersatwork.data.Task;
 
 public class WorkInProgressFragment extends Fragment implements ClosingOrderDialogFragment.EditCommentDialogListener {
 
+    private String masterId;
+
+    private ChildEventListener childEventListener;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference ordersFirebaseRef;
+    private Query orderQuery;
+
     private WorkInProgressAdapter adapter;
 
-    public WorkInProgressFragment() {
-        // Required empty public constructor
+    public static WorkInProgressFragment newInstance(String userId) {
+        WorkInProgressFragment fragment = new WorkInProgressFragment();
+        Bundle args = new Bundle();
+        args.putString("USER_ID", userId);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        masterId = getArguments().getString("USER_ID");
+        adapter = new WorkInProgressAdapter(getContext(), new ArrayList<Task>());
     }
 
     @Override
@@ -31,52 +59,10 @@ public class WorkInProgressFragment extends Fragment implements ClosingOrderDial
         View view = inflater.inflate(R.layout.work_in_progress_fragment, container, false);
 
 
-        // With fake data:
-
-        Task task = new Task();
-        task.setOrderNumber("1");
-        task.setAmount(1000);
-        task.setCustomersAddress("Варшавское шоссе, 18, к.1, кв. 101");
-        task.setJob("Покрасить стены");
-        task.setCustomersName("Евгений Козлов");
-        task.setCustomersPhone("89266676738");
-
-        Task task1 = new Task();
-        task1.setAmount(1000);
-        task1.setOrderNumber("2");
-        task1.setCustomersAddress("Адрес: Варшавское шоссе, 18, к.1");
-        task1.setJob("Покрасить стены + положить паркет");
-        task1.setCustomersName("Евгений Козлов");
-        task1.setCustomersPhone("89266676738");
-
-        Task task2 = new Task();
-        task2.setAmount(1000);
-        task2.setOrderNumber("3");
-        task2.setCustomersAddress("Варшавское шоссе, 18, к.1");
-        task2.setJob("Покрасить стены и перевезти мебель");
-        task2.setCustomersName("Евгений Козлов");
-        task2.setCustomersPhone("89266676738");
-
-        Task task3 = new Task();
-        task3.setAmount(1000);
-        task3.setOrderNumber("4");
-        task3.setCustomersAddress("Варшавское шоссе, 18, к.1");
-        task3.setJob("Ремонт на балконе (застеклить)");
-        task3.setCustomersName("Евгений Козлов");
-        task3.setCustomersPhone("89266676738");
-
-        ArrayList<Task> tasks = new ArrayList<>();
-        tasks.add(task);
-        tasks.add(task1);
-        tasks.add(task2);
-        tasks.add(task3);
-
-
         ListView listView = (ListView) view.findViewById(R.id.list_view_work_in_progress);
         View emptyView = view.findViewById(R.id.empty_view);
         listView.setEmptyView(emptyView);
 
-        adapter = new WorkInProgressAdapter(getContext(), tasks);
         adapter.setCallback(new WorkInProgressAdapter.CallBackFromAdapter() {
             @Override
             public void showAlertDialogInsideAdapter(String order, int price) {
@@ -85,11 +71,70 @@ public class WorkInProgressFragment extends Fragment implements ClosingOrderDial
                 fragment.setTargetFragment(WorkInProgressFragment.this, 300);
                 fragment.show(fm, "some tag");
             }
+
+            @Override
+            public void openDetailWorkInProgressActivityInTheAdapter() {
+                Intent intent = new Intent(getActivity(), WorkInProgressDetail.class);
+                startActivity(intent);
+            }
+
+            @Override
+            public void dialClient(String phone) {
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:" + phone));
+                startActivity(intent);
+            }
         });
 
         listView.setAdapter(adapter);
 
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        ordersFirebaseRef = firebaseDatabase.getReference().child("orders");
+        orderQuery = ordersFirebaseRef.orderByChild("Master").equalTo(masterId);
+        orderQuery.keepSynced(true);
+
+        attachOrderListener();
+
         return view;
+    }
+
+    private void attachOrderListener() {
+        if (childEventListener == null) {
+            ChildEventListener childEventListener = new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    Task order = dataSnapshot.getValue(Task.class);
+
+                    if (order.getStatus() == 1) {
+                        adapter.add(order);
+                    }
+                }
+
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+                    adapter.removeItemByFirebaseId(dataSnapshot.getKey());
+                    orderQuery = ordersFirebaseRef.orderByChild("status").equalTo(1);
+
+                }
+
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+                @Override
+                public void onCancelled(DatabaseError databaseError) {}
+            };
+
+            orderQuery.addChildEventListener(childEventListener);
+        }
+
+    }
+
+    private void detachOrderListener() {
+        if (childEventListener != null) {
+            orderQuery.removeEventListener(childEventListener);
+            childEventListener = null;
+        }
     }
 
     @Override
@@ -97,6 +142,14 @@ public class WorkInProgressFragment extends Fragment implements ClosingOrderDial
         super.onDestroyView();
         adapter.setCallback(null);
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        detachOrderListener();
+        adapter.clear();
+    }
+
 
     @Override
     public void onFinishCommentDialog(int receivedPrice, String receivedComment) {

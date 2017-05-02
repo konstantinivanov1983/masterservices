@@ -7,17 +7,17 @@ import java.util.ArrayList;
 public class Master {
 
     @Exclude
-    private String masterId;
+    private String id;
 
-    private String masterName;
-    private String masterEmail;
+    private String name;
+    private String email;
 
     private String assignedOrders;
 
     public Master(String masterId, String masterName, String masterEmail) {
-        this.masterId = masterId;
-        this.masterName = masterName;
-        this.masterEmail = masterEmail;
+        this.id = masterId;
+        this.name = masterName;
+        this.email = masterEmail;
     }
 
     private void setAssignedOrders(String order) {
@@ -26,26 +26,26 @@ public class Master {
 
     @Exclude
     public String getMasterId() {
-        return masterId;
+        return id;
     }
 
     public void setMasterId(String masterId) {
-        this.masterId = masterId;
+        this.id = masterId;
     }
 
     public String getMasterName() {
-        return masterName;
+        return name;
     }
 
     public void setMasterName(String masterName) {
-        this.masterName = masterName;
+        this.name = masterName;
     }
 
     public String getMasterEmail() {
-        return masterEmail;
+        return email;
     }
 
     public void setMasterEmail(String masterEmail) {
-        this.masterEmail = masterEmail;
+        this.email = masterEmail;
     }
 }
