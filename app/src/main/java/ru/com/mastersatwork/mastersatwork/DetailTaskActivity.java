@@ -1,15 +1,17 @@
 package ru.com.mastersatwork.mastersatwork;
 
+
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -53,14 +55,31 @@ public class DetailTaskActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                database = FirebaseDatabase.getInstance();
-                databaseReference = database.getReference().child("orders");
+                AlertDialog.Builder builder = new AlertDialog.Builder(DetailTaskActivity.this);
+                builder.setTitle("Внимание!");
+                builder.setMessage("Вы действительно хотите взять данный заказ?");
+                builder.setPositiveButton("ДА", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        database = FirebaseDatabase.getInstance();
+                        databaseReference = database.getReference().child("orders");
 
-                String taskId = getIntent().getStringExtra("ORDER_ID_FIREBASE");
+                        String taskId = getIntent().getStringExtra("ORDER_ID_FIREBASE");
 
-                //databaseReference.push().setValue(task);
-                databaseReference.child(taskId).child("status").setValue(1);
-                databaseReference.child(taskId).child("Master").setValue(masterId);
+                        //databaseReference.push().setValue(task);
+                        databaseReference.child(taskId).child("status").setValue(1);
+                        databaseReference.child(taskId).child("Master").setValue(masterId);
+
+                        openMain();
+                    }
+                });
+                builder.setNegativeButton("НЕТ", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
         });
     }
@@ -73,5 +92,10 @@ public class DetailTaskActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void openMain() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 }

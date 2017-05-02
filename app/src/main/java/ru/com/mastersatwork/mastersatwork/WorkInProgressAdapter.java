@@ -95,7 +95,7 @@ public class WorkInProgressAdapter extends ArrayAdapter<Task> {
         workRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Work work = dataSnapshot.getValue(Work.class);
+                final Work work = dataSnapshot.getValue(Work.class);
                 if (work != null) {
                     viewHolder.job.setText(Html.fromHtml("<b>Услуга: </b>" + work.getName()));
                     orderDownloadFinished[0] = true;
@@ -105,12 +105,20 @@ public class WorkInProgressAdapter extends ArrayAdapter<Task> {
                 custRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        Customer customer = dataSnapshot.getValue(Customer.class);
+                        final Customer customer = dataSnapshot.getValue(Customer.class);
                         if (customer != null ){
                             viewHolder.clientName.setText(Html.fromHtml("<b>Клиент: </b>" + customer.getName()));
                             viewHolder.clientAddress.setText(Html.fromHtml("<b>Адрес: </b>" + customer.getPublicAddress() + " " + customer.getPrivateAddress()));
                             viewHolder.clientPhone.setText(Html.fromHtml("<b>Телефон: </b>" + customer.getPhone()));
                             custRef.removeEventListener(this);
+
+                            viewHolder.detailButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    mCallback.openDetailWorkInProgressActivityInTheAdapter(customer, work, task.getIdOrders());
+
+                                }
+                            });
                         }
                     }
 
@@ -148,14 +156,6 @@ public class WorkInProgressAdapter extends ArrayAdapter<Task> {
             }
         });
 
-        viewHolder.detailButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCallback.openDetailWorkInProgressActivityInTheAdapter();
-
-            }
-        });
-
         return convertView;
     }
 
@@ -174,7 +174,7 @@ public class WorkInProgressAdapter extends ArrayAdapter<Task> {
     public interface CallBackFromAdapter {
 
         void showAlertDialogInsideAdapter(String order, int price);
-        void openDetailWorkInProgressActivityInTheAdapter();
+        void openDetailWorkInProgressActivityInTheAdapter(Customer c, Work w, String id);
         void dialClient(String number);
     }
 

@@ -20,19 +20,21 @@ public class ClosingOrderDialogFragment extends DialogFragment {
     private EditText editAmount;
     private int orderPrice;
     private boolean hasSamePrice = true;
+    private String orderId;
 
     public interface EditCommentDialogListener {
-        void onFinishCommentDialog(int price, String inputText);
+        void onFinishCommentDialog(int price, String inputText, String ordId);
     }
 
     public ClosingOrderDialogFragment() {
     }
 
-    public static ClosingOrderDialogFragment newInstance(String title, int price) {
+    public static ClosingOrderDialogFragment newInstance(String title, int price, String ordId) {
         ClosingOrderDialogFragment closingOrderDialogFragment = new ClosingOrderDialogFragment();
         Bundle args = new Bundle();
         args.putString("order", title);
         args.putInt("price", price);
+        args.putString("orderId", ordId);
         closingOrderDialogFragment.setArguments(args);
         return closingOrderDialogFragment;
     }
@@ -42,6 +44,7 @@ public class ClosingOrderDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         String order = getArguments().getString("order");
         orderPrice = getArguments().getInt("price");
+        orderId = getArguments().getString("orderId");
         LayoutInflater factory = LayoutInflater.from(getContext());
         final View view = factory.inflate(R.layout.closing_order_alert_dialog, null);
         editAmount = (EditText) view.findViewById(R.id.dialog_edit_text_amount);
@@ -74,12 +77,12 @@ public class ClosingOrderDialogFragment extends DialogFragment {
                         if (amount.length() == 0 || !isNumber) {
                             Toast.makeText(getContext(), "Введите полученную сумму корректно", Toast.LENGTH_SHORT).show();
                         } else if (Integer.parseInt(amount) == orderPrice) {
-                            sendBackResult(orderPrice, null);
+                            sendBackResult(orderPrice, null, orderId);
                             dismiss();
                         } else if (editComment.getText().length() == 0) {
                             Toast.makeText(getContext(), "Полученная сумма отличается от изначальной суммы заказа. Введите комментарий", Toast.LENGTH_LONG).show();
                         } else {
-                            sendBackResult(Integer.parseInt(amount), editComment.getText().toString());
+                            sendBackResult(Integer.parseInt(amount), editComment.getText().toString(), orderId);
                             dismiss();
                         }
                     }
@@ -91,9 +94,9 @@ public class ClosingOrderDialogFragment extends DialogFragment {
 
     }
 
-    private void sendBackResult(int finalPrice, String finalComment) {
+    private void sendBackResult(int finalPrice, String finalComment, String ordId) {
         EditCommentDialogListener listener = (EditCommentDialogListener) getTargetFragment();
-        listener.onFinishCommentDialog(finalPrice, finalComment);
+        listener.onFinishCommentDialog(finalPrice, finalComment, ordId);
     }
 
     private void setupFloatingLabelError(View view) {

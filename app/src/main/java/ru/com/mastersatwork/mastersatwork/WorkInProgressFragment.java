@@ -23,7 +23,9 @@ import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 
+import ru.com.mastersatwork.mastersatwork.data.Customer;
 import ru.com.mastersatwork.mastersatwork.data.Task;
+import ru.com.mastersatwork.mastersatwork.data.Work;
 
 
 public class WorkInProgressFragment extends Fragment implements ClosingOrderDialogFragment.EditCommentDialogListener {
@@ -67,14 +69,21 @@ public class WorkInProgressFragment extends Fragment implements ClosingOrderDial
             @Override
             public void showAlertDialogInsideAdapter(String order, int price) {
                 FragmentManager fm = getFragmentManager();
-                ClosingOrderDialogFragment fragment = ClosingOrderDialogFragment.newInstance(order, price);
+                ClosingOrderDialogFragment fragment = ClosingOrderDialogFragment.newInstance(order, price, order);
                 fragment.setTargetFragment(WorkInProgressFragment.this, 300);
                 fragment.show(fm, "some tag");
             }
 
             @Override
-            public void openDetailWorkInProgressActivityInTheAdapter() {
+            public void openDetailWorkInProgressActivityInTheAdapter(Customer c, Work work, String idOrder) {
                 Intent intent = new Intent(getActivity(), WorkInProgressDetail.class);
+                intent.putExtra("CustomerName", c.getName());
+                intent.putExtra("CustomerPubAddress", c.getPublicAddress());
+                intent.putExtra("CustomerPrivAddress", c.getPrivateAddress());
+                intent.putExtra("CustomerPhone", c.getPhone());
+                intent.putExtra("ServiceTitle", work.getName());
+                intent.putExtra("IdOrder", idOrder);
+                intent.putExtra("MasterId", masterId);
                 startActivity(intent);
             }
 
@@ -118,7 +127,14 @@ public class WorkInProgressFragment extends Fragment implements ClosingOrderDial
                 }
 
                 @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                    Task changedOrder = dataSnapshot.getValue(Task.class);
+                    if (changedOrder.getStatus() != 1) {
+                        adapter.removeItemByFirebaseId(changedOrder.getIdOrders());
+                        orderQuery = ordersFirebaseRef.orderByChild("status").equalTo(1);
+                    }
+                }
+
                 @Override
                 public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
                 @Override
@@ -152,7 +168,11 @@ public class WorkInProgressFragment extends Fragment implements ClosingOrderDial
 
 
     @Override
-    public void onFinishCommentDialog(int receivedPrice, String receivedComment) {
+    public void onFinishCommentDialog(int receivedPrice, String receivedComment, String ordId) {
         Toast.makeText(getContext(), "Ваш комментарий: " + receivedComment +"\nПолученная Вами сумма: " + receivedPrice, Toast.LENGTH_LONG).show();
+        DatabaseReference orderReference = firebaseDatabase.getReference().child("orders").child(ordId);
+        orderReference.child("status").setValue(2);
+        orderReference.child("MasterComment").setValue(receivedComment);
+        orderReference.child("TotalAmount").setValue(receivedPrice);
     }
 }
